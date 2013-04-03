@@ -102,6 +102,7 @@ public class BuoyOriented extends Buoy {
                 zone = 2; // zone C
             }
         }
+        //System.out.println("boat [" + boatPos.x + ", " + boatPos.z + "] buoy [" + pos.x + ", " + pos.z + "] orient [" + orientation.x + ", " + orientation.z + "] zone [" + zone + "]");
         return zone;
     }
 

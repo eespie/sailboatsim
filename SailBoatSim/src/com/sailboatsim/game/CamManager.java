@@ -24,7 +24,7 @@ import com.sailboatsim.game.boat.Boat;
 public class CamManager implements ActionListener {
     private final CameraNode camNode;
     //private final Vector3f   initialPos    = new Vector3f(0, 10, -30);
-    private final Vector3f   initialPos    = new Vector3f(0, 200, -10);
+    private final Vector3f   initialPos    = new Vector3f(0, 20, -50);
     private Vector3f         currPos;
     private float            zoomFactor    = 1.0f;
     private final float      zoomFactorMin = 0.1f;
@@ -103,7 +103,7 @@ public class CamManager implements ActionListener {
             camNode.setLocalTranslation(currPos.mult(zoomFactor));
         }
         // rotate camera
-        //camHeading = FastMath.interpolateLinear(0.01f, camHeading, playerBoat.getHeading());
+        camHeading = FastMath.interpolateLinear(0.01f, camHeading, playerBoat.getHeading());
         playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(-camHeading + headingOffset, Vector3f.UNIT_Y));
     }
 }

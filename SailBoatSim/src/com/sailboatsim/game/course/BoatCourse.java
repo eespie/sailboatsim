@@ -11,6 +11,7 @@ public class BoatCourse {
     private final Map<Buoy, BuoyState> states;
     private int                        lastBuoyPassed = -1;
     private final List<Buoy>           buoyList;
+    private Buoy                       nextBuoy;
 
     public BoatCourse(Course course) {
         states = new HashMap<Buoy, BuoyState>();
@@ -21,6 +22,7 @@ public class BoatCourse {
     }
 
     public boolean update(Vector3f boatPos) {
+        nextBuoy = null;
         int index = lastBuoyPassed;
         if (index < 0) {
             index = 0;
@@ -44,7 +46,15 @@ public class BoatCourse {
             // check next buoy
             buoy = buoyList.get(index);
         }
+        nextBuoy = buoy;
         lastBuoyPassed = index - 1;
         return false;
+    }
+
+    /**
+     * @return the nextBuoy
+     */
+    public Buoy getNextBuoy() {
+        return nextBuoy;
     }
 }

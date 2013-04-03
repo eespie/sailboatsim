@@ -22,6 +22,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.course.BoatCourse;
+import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.game.course.Course;
 import com.sailboatsim.utils.Utils;
 
@@ -247,6 +248,14 @@ public class Boat implements ActionListener {
 
     public void setPosition(Vector3f pos) {
         rootBoat.setLocalTranslation(pos);
+    }
+
+    /**
+     * @return
+     * @see com.sailboatsim.game.course.BoatCourse#getNextBuoy()
+     */
+    public Buoy getNextBuoy() {
+        return boatCourse.getNextBuoy();
     }
 
 }
