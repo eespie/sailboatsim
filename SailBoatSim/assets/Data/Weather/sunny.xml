@@ -1,0 +1,12 @@
+<com.sailboatsim.game.environment.WeatherData>
+  <lightDir>
+    <x>-4.9</x>
+    <y>-1.3</y>
+    <z>5.9</z>
+  </lightDir>
+  <initialWaterHeight>0.0</initialWaterHeight>
+  <textureSky>Scenes/Beach/FullskiesSunset0068.dds</textureSky>
+  <textureWaterFoam>Common/MatDefs/Water/Textures/foam2.jpg</textureWaterFoam>
+  <globalWindSpeed>20.0</globalWindSpeed>
+  <globalWindDirection>3.1415927</globalWindDirection>
+</com.sailboatsim.game.environment.WeatherData>

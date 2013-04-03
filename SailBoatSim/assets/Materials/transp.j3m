@@ -1,0 +1,10 @@
+Material My Material : Common/MatDefs/Misc/Unshaded.j3md {
+     MaterialParameters {
+        VertexColor : true
+        SeparateTexCoord : false
+        Color : 1 1 1 1
+     }
+    AdditionalRenderState {
+        Blend Alpha
+    }
+}
