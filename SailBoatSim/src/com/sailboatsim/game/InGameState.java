@@ -3,6 +3,8 @@
  */
 package com.sailboatsim.game;
 
+import static com.jme3.math.FastMath.RAD_TO_DEG;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ import com.sailboatsim.game.boat.Boat;
 import com.sailboatsim.game.course.Course;
 import com.sailboatsim.game.environment.Scenery;
 import com.sailboatsim.game.environment.Weather;
+import com.sailboatsim.utils.Utils;
 
 /**
  * @author eric
@@ -117,6 +120,12 @@ public class InGameState extends AbstractAppState implements ActionListener {
         weather.update(tpf);
         playerBoat.update(tpf);
         camManager.update(tpf);
+
+        //Buoy nextBuoy = playerBoat.getNextBuoy();
+
+        display("Speed " + playerBoat.getCurSpeed() + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
+                + (int) playerBoat.getRelWindSpeed() + " Next Buoy ");
+
     }
 
     public boolean isWaterOk(Vector3f position, float margin) {

@@ -30,6 +30,10 @@ import com.sailboatsim.utils.Utils;
  * @author eric
  * 
  */
+/**
+ * @author eric
+ * 
+ */
 public class Boat implements ActionListener {
 
     private final BoatData    data;
@@ -55,6 +59,9 @@ public class Boat implements ActionListener {
     private boolean           hasSpinaker = false;
 
     private BoatCourse        boatCourse;
+
+    private float             windAspect;
+    private Vector3f          windRelVector;
 
     public Boat(InGameState inGameState) {
         data = BoatData.load("first");
@@ -95,14 +102,14 @@ public class Boat implements ActionListener {
         Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(curSpeed);
 
         Vector3f windVector = inGameState.getWeather().getWindComposant(boatPos);
-        Vector3f windRelVector = windVector.subtract(boatDir);
+        windRelVector = windVector.subtract(boatDir);
 
         relWindAngle = FastMath.atan2(windRelVector.x, -windRelVector.z) - heading;
         relWindAngle = Utils.angleToMinusPiPi(relWindAngle);
 
         float relWindAbs = FastMath.abs(relWindAngle);
 
-        float windAspect = Utils.angleToMinusPiPi(FastMath.atan2(windVector.x, -windVector.z) - heading);
+        windAspect = Utils.angleToMinusPiPi(FastMath.atan2(windVector.x, -windVector.z) - heading);
         float windSpeed = windVector.length();
         float targetSpeed = getSpeed(windAspect, windSpeed);
         if (!inGameState.isWaterOk(boatPos, 2f)) {
@@ -115,8 +122,8 @@ public class Boat implements ActionListener {
             curSpeed = 0.1f;
         }
 
-        inGameState.display(" Speed " + (int) curSpeed + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(heading)) + " wind angle " + (int) (RAD_TO_DEG * windAspect) + " rel wind angle " + (int) (RAD_TO_DEG * relWindAngle) + "  rel wind "
-                + (int) windRelVector.length() + " Pos x=" + (int) (boatPos.x) + " Pos z=" + (int) (boatPos.z));
+        //inGameState.display(" Speed " + (int) curSpeed + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(heading)) + " wind angle " + (int) (RAD_TO_DEG * windAspect) + " rel wind angle " + (int) (RAD_TO_DEG * relWindAngle) + "  rel wind "
+        //        + (int) windRelVector.length() + " Pos x=" + (int) (boatPos.x) + " Pos z=" + (int) (boatPos.z));
 
         if (left) {
             rotSpeed = FastMath.interpolateLinear(data.yawInertia, rotSpeed, -(FastMath.sqrt(curSpeed + 1f) + 0.5f) / 2.0f);
@@ -258,4 +265,24 @@ public class Boat implements ActionListener {
         return boatCourse.getNextBuoy();
     }
 
+    /**
+     * @return the windAspect -PI to PI
+     */
+    public float getRelWindAspect() {
+        return relWindAngle;
+    }
+
+    /**
+     * @return relative wind speed
+     */
+    public float getRelWindSpeed() {
+        return windRelVector.length();
+    }
+
+    /**
+     * @return the curSpeed
+     */
+    public float getCurSpeed() {
+        return FastMath.floor(curSpeed * 10.0f) / 10.0f;
+    }
 }

@@ -7,6 +7,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -59,7 +60,7 @@ public class Weather {
         Vector3f currWind = mainWindDir.mult(data.globalWindSpeed);
         //Vector3f currWind = new Vector3f(0, 0, 0);
         for (int angleDeg = -180; angleDeg < 0; angleDeg += stepAngleDeg) {
-            float direction = data.globalWindDirection + (float) Math.toRadians(angleDeg);
+            float direction = data.globalWindDirection + (FastMath.DEG_TO_RAD * angleDeg);
             Vector3f dirToExplore = new Quaternion().fromAngleAxis(direction, Vector3f.UNIT_Y).mult(Vector3f.UNIT_Z);
             float heightCoeff = 0;
             for (int displacement = -maxDisplacement; displacement <= maxDisplacement; displacement += stepDisplacement) {
@@ -68,10 +69,10 @@ public class Weather {
                 }
                 Vector3f posToExplore = location.add(dirToExplore.mult(displacement));
                 float height = inGameState.getTerrainHeight(posToExplore);
-                heightCoeff += Math.abs((float) stepDisplacement / (float) displacement) * height;
+                heightCoeff += FastMath.abs((float) stepDisplacement / (float) displacement) * height;
             }
             heightCoeff = (heightCoeff * data.globalWindSpeed) / coeffSum;
-            float deviationAngle = data.globalWindDirection + (float) Math.toRadians((2 * angleDeg) + 180);
+            float deviationAngle = data.globalWindDirection + (FastMath.DEG_TO_RAD * ((2 * angleDeg) + 180f));
             Vector3f deviation = new Quaternion().fromAngleAxis(deviationAngle, Vector3f.UNIT_Y).mult(Vector3f.UNIT_Z).mult(heightCoeff);
             currWind.addLocal(deviation);
         }
