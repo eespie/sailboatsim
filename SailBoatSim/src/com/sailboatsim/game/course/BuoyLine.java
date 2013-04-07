@@ -27,7 +27,7 @@ public class BuoyLine extends Buoy {
     private Node                 lineNode;
 
     public BuoyLine(String name, Vector3f posLeft, Vector3f posRight, String modelLeft, String ModelRight, String description) {
-        super(name, null, description, null);
+        super(name, posLeft.add(posRight).divide(2f), description, null);
         buoys = new BuoyOriented[2];
         buoys[0] = new BuoyOriented("Left " + name, false, posLeft, posRight, description, modelLeft);
         buoys[1] = new BuoyOriented("Right " + name, true, posRight, posLeft, description, ModelRight);
@@ -40,6 +40,7 @@ public class BuoyLine extends Buoy {
         }
         Vector3f p0 = buoys[0].getPos();
         Vector3f p1 = buoys[1].getPos();
+        super.pos = p0.add(p1).divide(2f);
 
         Box box = new Box(Vector3f.ZERO, p0.distance(p1) / 2, 1f, 0.1f);
         Geometry geom = new Geometry("Box", box); // create cube geometry from the shape

@@ -62,6 +62,7 @@ public class Boat implements ActionListener {
 
     private float             windAspect;
     private Vector3f          windRelVector;
+    private Vector3f          boatSpeed;
 
     public Boat(InGameState inGameState) {
         data = BoatData.load("first");
@@ -97,6 +98,7 @@ public class Boat implements ActionListener {
         if (!inGameState.isRunning()) {
             return;
         }
+        float inTpf = tpf * 1.50f;
 
         Vector3f boatPos = rootBoat.getLocalTranslation();
         Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(curSpeed);
@@ -132,22 +134,23 @@ public class Boat implements ActionListener {
         } else {
             rotSpeed = FastMath.interpolateLinear(0.05f, rotSpeed, 0);
         }
-        heading += tpf * rotSpeed;
-        float displacement = tpf * curSpeed * 2.0f;
+        heading += inTpf * rotSpeed;
+        float displacement = inTpf * curSpeed * 2.0f;
 
         roll = FastMath.interpolateLinear(0.05f, roll, (FastMath.abs(windAspect) < QUARTER_PI ? windAspect / QUARTER_PI : (FastMath.sign(windAspect) * (PI - FastMath.abs(windAspect))) / (3 * QUARTER_PI)) * windRelVector.length() * DEG_TO_RAD);
 
-        pitch += tpf * (1f + (curSpeed / (5f + FastMath.abs(windAspect))));
+        pitch += inTpf * (1f + (curSpeed / (5f + FastMath.abs(windAspect))));
         float pitchAngle = (5f - (windSpeed / 8f)) * DEG_TO_RAD * ((FastMath.sin(pitch) * FastMath.cos(pitch)) + FastMath.sin(pitch + (FastMath.abs(windAspect) / 2f)));
 
         Quaternion rot = new Quaternion().fromAngles(pitchAngle, -heading, -roll);
 
         boat.setLocalRotation(rot);
 
-        Vector3f ld = new Vector3f(0, 0, displacement);
+        Vector3f ld = new Vector3f(0f, 0f, 1f);
         rot = new Quaternion().fromAngleAxis(-heading, Vector3f.UNIT_Y);
         Vector3f gd = rot.mult(ld);
-        boatPos = boatPos.add(gd);
+        boatPos = boatPos.add(gd.mult(displacement));
+        boatSpeed = gd.mult(curSpeed);
 
         //boat.setLocalRotation(rot);
         rootBoat.setLocalTranslation(boatPos);
@@ -213,7 +216,7 @@ public class Boat implements ActionListener {
         }
     }
 
-    public Vector3f getLocalTranslation() {
+    public Vector3f getPos() {
         return rootBoat.getLocalTranslation();
     }
 
@@ -284,5 +287,12 @@ public class Boat implements ActionListener {
      */
     public float getCurSpeed() {
         return FastMath.floor(curSpeed * 10.0f) / 10.0f;
+    }
+
+    /**
+     * @return the boatSpeed
+     */
+    public Vector3f getBoatSpeed() {
+        return boatSpeed;
     }
 }

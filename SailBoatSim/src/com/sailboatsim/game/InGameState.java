@@ -20,6 +20,7 @@ import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
@@ -28,6 +29,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.sailboatsim.game.boat.Boat;
+import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.game.course.Course;
 import com.sailboatsim.game.environment.Scenery;
 import com.sailboatsim.game.environment.Weather;
@@ -121,10 +123,21 @@ public class InGameState extends AbstractAppState implements ActionListener {
         playerBoat.update(tpf);
         camManager.update(tpf);
 
-        //Buoy nextBuoy = playerBoat.getNextBuoy();
+        Buoy nextBuoy = playerBoat.getNextBuoy();
+        if (nextBuoy != null) {
+            Vector3f buoyPos = nextBuoy.getPos();
+            Vector3f toNextBuoy = buoyPos.subtract(playerBoat.getPos());
+            Vector3f toNextBuoyNorm = toNextBuoy.normalize();
+            float toBuoySpeed = playerBoat.getBoatSpeed().dot(toNextBuoyNorm);
+            Vector3f boatSpeedNorm = playerBoat.getBoatSpeed().normalize();
+            float buoyAngle = FastMath.RAD_TO_DEG * Utils.angleToMinusPiPi((FastMath.atan2(toNextBuoyNorm.z, toNextBuoyNorm.x) - FastMath.atan2(boatSpeedNorm.z, boatSpeedNorm.x)));
 
-        display("Speed " + playerBoat.getCurSpeed() + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
-                + (int) playerBoat.getRelWindSpeed() + " Next Buoy ");
+            display("Speed " + playerBoat.getCurSpeed() + "kts Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
+                    + (int) playerBoat.getRelWindSpeed() + " Next Buoy " + (int) toNextBuoy.length() + "m at " + (int) buoyAngle + " spd " + (FastMath.floor(toBuoySpeed * 10f) / 10f) + "kts");
+        } else {
+            display("Speed " + playerBoat.getCurSpeed() + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
+                    + (int) playerBoat.getRelWindSpeed());
+        }
 
     }
 

@@ -53,7 +53,7 @@ public class Weather {
         maxDisplacement = 300;
         nbDisplacementStep = maxDisplacement / stepDisplacement;
         coeffSum = 40.0F * ((float) Math.log(nbDisplacementStep) + 0.577215665F + (1F / (2F * nbDisplacementStep)));
-        maxWindSpeed = data.globalWindSpeed * 1.3f;
+        maxWindSpeed = data.globalWindSpeed + 5f;
     }
 
     public Vector3f getWindComposant(Vector3f location) {

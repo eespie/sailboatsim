@@ -13,20 +13,26 @@ import com.sailboatsim.game.InGameState;
  * 
  */
 public abstract class Buoy {
-    private final String     name;
-    private final String     description;
-    private final String     model;
-    protected final Vector3f pos;
-    protected Node rootBuoy;
+    private final String name;
+    private final String description;
+    private final String model;      // 3D Model
+    protected Vector3f   pos;
+    protected Node       rootBuoy;
 
     /**
-     * @param description
      * @param name
+     *            Buoy name
+     * @param pos
+     *            buoy pos (mandatory)
+     * @param description
+     *            buoy desc
+     * @param ThreeDModel
+     *            3D model associated (null if no model associated)
      */
-    public Buoy(String name, Vector3f pos, String description, String model) {
+    public Buoy(String name, Vector3f pos, String description, String ThreeDModel) {
         this.description = description;
         this.name = name;
-        this.model = model;
+        model = ThreeDModel;
         this.pos = pos;
     }
 

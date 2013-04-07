@@ -47,7 +47,7 @@ public class CamManager implements ActionListener {
         currPos = new Vector3f(initialPos);
         camNode.setLocalTranslation(currPos);
         // Rotate the camNode to look at the target:
-        camNode.lookAt(playerBoat.getLocalTranslation(), Vector3f.UNIT_Y);
+        camNode.lookAt(playerBoat.getPos(), Vector3f.UNIT_Y);
 
         registerDefaultKeys(inGameState);
     }
