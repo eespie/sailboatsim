@@ -33,6 +33,7 @@ import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.game.course.Course;
 import com.sailboatsim.game.environment.Scenery;
 import com.sailboatsim.game.environment.Weather;
+import com.sailboatsim.player.PlayerUI;
 import com.sailboatsim.utils.Utils;
 
 /**
@@ -59,6 +60,7 @@ public class InGameState extends AbstractAppState implements ActionListener {
     private Weather            weather;
     private Scenery            scenery;
     private Course             course;
+    private PlayerUI           playerUI;
 
     public InGameState(SimpleApplication app) {
         rootNode = app.getRootNode();
@@ -113,6 +115,8 @@ public class InGameState extends AbstractAppState implements ActionListener {
         pausetext.setText("");
         localGuiNode.attachChild(pausetext);
 
+        playerUI = new PlayerUI(this);
+
     }
 
     @Override
@@ -122,6 +126,7 @@ public class InGameState extends AbstractAppState implements ActionListener {
         weather.update(tpf);
         playerBoat.update(tpf);
         camManager.update(tpf);
+        playerUI.update(tpf);
 
         Buoy nextBuoy = playerBoat.getNextBuoy();
         if (nextBuoy != null) {
@@ -227,6 +232,13 @@ public class InGameState extends AbstractAppState implements ActionListener {
      */
     public Weather getWeather() {
         return weather;
+    }
+
+    /**
+     * @return the playerBoat
+     */
+    public Boat getPlayerBoat() {
+        return playerBoat;
     }
 
 }
