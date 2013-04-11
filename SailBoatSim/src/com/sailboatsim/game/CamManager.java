@@ -25,6 +25,7 @@ public class CamManager implements ActionListener {
     private final CameraNode camNode;
     //private final Vector3f   initialPos    = new Vector3f(0, 10, -30);
     private final Vector3f   initialPos    = new Vector3f(0, 20, -50);
+    private final Vector3f   topPos        = new Vector3f(0, 200, 0);
     private Vector3f         currPos;
     private float            zoomFactor    = 1.0f;
     private final float      zoomFactorMin = 0.1f;
@@ -33,6 +34,7 @@ public class CamManager implements ActionListener {
     private float            headingOffset = 0;
     private boolean          zoomIn        = false;
     private boolean          zoomOut       = false;
+    private boolean          easeCam       = true;
 
     public CamManager(InGameState inGameState, Camera cam, FlyByCamera flyBy, Boat playerBoat) {
         // Disable the default fly by camera
@@ -57,8 +59,8 @@ public class CamManager implements ActionListener {
         keys.put("Look Left", KeyInput.KEY_NUMPAD4);
         keys.put("Look Right", KeyInput.KEY_NUMPAD6);
         keys.put("Look Front", KeyInput.KEY_NUMPAD8);
-        keys.put("Look Rear", KeyInput.KEY_NUMPAD2);
-        keys.put("Reset view", KeyInput.KEY_NUMPAD5);
+        keys.put("Reset view", KeyInput.KEY_NUMPAD2);
+        keys.put("Look Down", KeyInput.KEY_NUMPAD5);
         keys.put("Zoom in", KeyInput.KEY_ADD);
         keys.put("Zoom out", KeyInput.KEY_SUBTRACT);
 
@@ -72,13 +74,18 @@ public class CamManager implements ActionListener {
             headingOffset = FastMath.HALF_PI;
         } else if (name.equals("Look Front")) {
             headingOffset = FastMath.PI;
-        } else if (name.equals("Look Rear")) {
-            headingOffset = 0;
-        } else if (name.equals("Reset view")) {
-            currPos = initialPos;
-            zoomFactor = 1.0f;
-            headingOffset = 0;
+        } else if (name.equals("Look Down") && !keyPressed) {
+            currPos = new Vector3f(topPos);
             camNode.setLocalTranslation(currPos.mult(zoomFactor));
+            camNode.lookAt(playerBoat.getPos(), Vector3f.UNIT_Z);
+            headingOffset = 0;
+        } else if (name.equals("Reset view") && !keyPressed) {
+            currPos = new Vector3f(initialPos);
+            zoomFactor = 1.0f;
+            camNode.setLocalTranslation(currPos.mult(zoomFactor));
+            camNode.lookAt(playerBoat.getPos(), Vector3f.UNIT_Y);
+            easeCam = true;
+            headingOffset = 0;
         } else if (name.equals("Zoom in")) {
             zoomIn = keyPressed;
         } else if (name.equals("Zoom out")) {
@@ -103,7 +110,9 @@ public class CamManager implements ActionListener {
             camNode.setLocalTranslation(currPos.mult(zoomFactor));
         }
         // rotate camera
-        camHeading = FastMath.interpolateLinear(0.01f, camHeading, playerBoat.getHeading());
-        playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(-camHeading + headingOffset, Vector3f.UNIT_Y));
+        if (easeCam) {
+            camHeading = FastMath.interpolateLinear(0.01f, camHeading, playerBoat.getHeading());
+            playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(-camHeading + headingOffset, Vector3f.UNIT_Y));
+        }
     }
 }

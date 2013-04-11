@@ -33,6 +33,7 @@ import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.game.course.Course;
 import com.sailboatsim.game.environment.Scenery;
 import com.sailboatsim.game.environment.Weather;
+import com.sailboatsim.game.environment.WindGrid;
 import com.sailboatsim.player.PlayerUI;
 import com.sailboatsim.utils.Utils;
 
@@ -61,6 +62,7 @@ public class InGameState extends AbstractAppState implements ActionListener {
     private Scenery            scenery;
     private Course             course;
     private PlayerUI           playerUI;
+    private WindGrid           windGrid;
 
     public InGameState(SimpleApplication app) {
         rootNode = app.getRootNode();
@@ -116,7 +118,7 @@ public class InGameState extends AbstractAppState implements ActionListener {
         localGuiNode.attachChild(pausetext);
 
         playerUI = new PlayerUI(this);
-
+        windGrid = new WindGrid(this, rootNode, assetManager);
     }
 
     @Override
