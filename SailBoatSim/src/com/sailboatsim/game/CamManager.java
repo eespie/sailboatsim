@@ -78,12 +78,16 @@ public class CamManager implements ActionListener {
             currPos = new Vector3f(topPos);
             camNode.setLocalTranslation(currPos.mult(zoomFactor));
             camNode.lookAt(playerBoat.getPos(), Vector3f.UNIT_Z);
+            playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(0, Vector3f.UNIT_Y));
+            easeCam = false;
             headingOffset = 0;
         } else if (name.equals("Reset view") && !keyPressed) {
+            playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(0, Vector3f.UNIT_Y));
             currPos = new Vector3f(initialPos);
             zoomFactor = 1.0f;
             camNode.setLocalTranslation(currPos.mult(zoomFactor));
             camNode.lookAt(playerBoat.getPos(), Vector3f.UNIT_Y);
+            playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(-camHeading, Vector3f.UNIT_Y));
             easeCam = true;
             headingOffset = 0;
         } else if (name.equals("Zoom in")) {
@@ -110,8 +114,8 @@ public class CamManager implements ActionListener {
             camNode.setLocalTranslation(currPos.mult(zoomFactor));
         }
         // rotate camera
+        camHeading = FastMath.interpolateLinear(0.01f, camHeading, playerBoat.getHeading());
         if (easeCam) {
-            camHeading = FastMath.interpolateLinear(0.01f, camHeading, playerBoat.getHeading());
             playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(-camHeading + headingOffset, Vector3f.UNIT_Y));
         }
     }
