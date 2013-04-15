@@ -7,32 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry including="**/*.java" kind="src" path="assets"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/eventbus.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/j-ogg-oggd.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/j-ogg-vorbisd.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jbullet.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jinput.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-blender.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-core.jar" sourcepath="/JME3_2012-09-01"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-desktop.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-effects.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-jbullet.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-jogg.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-lwjgl-natives.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-lwjgl.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-networking.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-niftygui.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-plugins.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-terrain.jar" sourcepath="/JME3_2012-09-01"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/jME3-testdata.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/lwjgl.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/nifty-default-controls.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/nifty-examples.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/nifty-style-black.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/nifty.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/stack-alloc.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/vecmath.jar"/>
-	<classpathentry kind="lib" path="/JME3_2012-09-01/lib/xmlpull-xpp3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
