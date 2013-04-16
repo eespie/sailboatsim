@@ -3,7 +3,13 @@
  */
 package com.sailboatsim.player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.jme3.asset.AssetManager;
+import com.jme3.input.InputManager;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
@@ -20,27 +26,34 @@ import com.jme3.util.BufferUtils;
 import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.boat.Boat;
 import com.sailboatsim.game.course.Buoy;
+import com.sailboatsim.utils.KeyboardInput;
+import com.sailboatsim.utils.SimpleEventListener;
+import com.sailboatsim.utils.SimpleEventManager;
 import com.sailboatsim.utils.Utils;
 
 /**
  * @author eric
  * 
  */
-public class PlayerUI {
-    private final InGameState inGameState;
-    private Node              gaugeNode;
-    private Node              windNode;
-    private Node              buoyNode;
-    private AssetManager      assetManager;
+public class PlayerUI implements ActionListener {
+    private final InGameState          inGameState;
+    private Node                       gaugeNode;
+    private Node                       windNode;
+    private Node                       buoyNode;
+    private AssetManager               assetManager;
+    // Player input keys management
+    private final SimpleEventManager   eventManager = new SimpleEventManager();
+    private final Map<String, Integer> keys         = new HashMap<String, Integer>();
 
+    // Called first (before other modules)
     public PlayerUI(InGameState inGameState) {
         this.inGameState = inGameState;
-        init();
     }
 
-    private void init() {
+    // Called last (after all other modules init)
+    public void init(Boat playerBoat) {
         gaugeNode = new Node("BoatGauge");
-        inGameState.getPlayerBoat().getBoat().attachChild(gaugeNode);
+        playerBoat.getBoat().attachChild(gaugeNode);
 
         // Create gauge
         Quad quad = new Quad(20f, 20f);
@@ -112,5 +125,24 @@ public class PlayerUI {
         geo.setMaterial(mat);
         root.attachChild(geo);
         return root;
+    }
+
+    /**
+     * @param event
+     * @param listener
+     * @see com.sailboatsim.utils.SimpleEventManager#register(java.lang.String, com.sailboatsim.utils.SimpleEventListener)
+     */
+    public void registerKey(String event, int defaultKey, SimpleEventListener listener) {
+        eventManager.register(event, listener);
+        keys.put(event, defaultKey);
+        InputManager inputManager = inGameState.getInputManager();
+        inputManager.addMapping(event, new KeyTrigger(defaultKey));
+        inputManager.addListener(this, event);
+    }
+
+    // On keyboard input
+    public void onAction(String name, boolean keyPressed, float tpf) {
+        KeyboardInput input = new KeyboardInput(name, keyPressed, tpf);
+        eventManager.triggerEvent(name, input);
     }
 }

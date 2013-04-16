@@ -5,9 +5,6 @@ package com.sailboatsim.game;
 
 import static com.jme3.math.FastMath.RAD_TO_DEG;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -18,8 +15,6 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -33,15 +28,19 @@ import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.game.course.Course;
 import com.sailboatsim.game.environment.Scenery;
 import com.sailboatsim.game.environment.Weather;
-import com.sailboatsim.game.environment.WindGrid;
+import com.sailboatsim.player.CamManager;
+import com.sailboatsim.player.PlayerBoat;
 import com.sailboatsim.player.PlayerUI;
+import com.sailboatsim.player.WindGrid;
+import com.sailboatsim.utils.KeyboardInput;
+import com.sailboatsim.utils.SimpleEventListener;
 import com.sailboatsim.utils.Utils;
 
 /**
  * @author eric
  * 
  */
-public class InGameState extends AbstractAppState implements ActionListener {
+public class InGameState extends AbstractAppState implements SimpleEventListener {
     private final Node         rootNode;
     private final Node         guiNode;
     private final AssetManager assetManager;
@@ -79,6 +78,9 @@ public class InGameState extends AbstractAppState implements ActionListener {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
 
+        // FIRST Action
+        playerUI = new PlayerUI(this);
+
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
         BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
         fpp.addFilter(bloom);
@@ -92,7 +94,7 @@ public class InGameState extends AbstractAppState implements ActionListener {
         course = Course.load("eRace-1");
         course.init(this);
 
-        playerBoat = new Boat(this);
+        playerBoat = new PlayerBoat(this);
         playerBoat.setPosition(course.getARandomStartPos());
         playerBoat.setCourse(course);
         rootNode.attachChild(playerBoat.getBoat());
@@ -117,8 +119,10 @@ public class InGameState extends AbstractAppState implements ActionListener {
         pausetext.setText("");
         localGuiNode.attachChild(pausetext);
 
-        playerUI = new PlayerUI(this);
         windGrid = new WindGrid(this, rootNode, assetManager);
+
+        // LAST Action
+        playerUI.init(playerBoat);
     }
 
     @Override
@@ -168,31 +172,22 @@ public class InGameState extends AbstractAppState implements ActionListener {
      * We over-write some navigation key mappings here
      */
     private void setUpKeys() {
-        // keys
-        Map<String, Integer> keys = new HashMap<String, Integer>();
-        keys.put("Pause", KeyInput.KEY_P);
-        registerKeys(keys, this);
+        playerUI.registerKey("Pause", KeyInput.KEY_P, this);
     }
 
-    public void registerKeys(Map<String, Integer> keys, ActionListener listener) {
-        for (String binding : keys.keySet()) {
-            inputManager.addMapping(binding, new KeyTrigger(keys.get(binding)));
-            inputManager.addListener(listener, binding);
-        }
-    }
-
-    /**
-     * These are our custom actions triggered by key presses.
-     */
-    public void onAction(String name, boolean keyPressed, float tpf) {
-        if (name.equals("Pause") && !keyPressed) {
-            isRunning = !isRunning;
-            if (isRunning) {
-                pausetext.setText("");
-            } else {
-                pausetext.setText("PAUSED");
+    public void onEvent(String name, Object eventData) {
+        if (eventData instanceof KeyboardInput) {
+            KeyboardInput input = (KeyboardInput) eventData;
+            if ("Pause".equals(name) && !input.keyPressed) {
+                isRunning = !isRunning;
+                if (isRunning) {
+                    pausetext.setText("");
+                } else {
+                    pausetext.setText("PAUSED");
+                }
             }
         }
+
     }
 
     /**
@@ -241,6 +236,20 @@ public class InGameState extends AbstractAppState implements ActionListener {
      */
     public Boat getPlayerBoat() {
         return playerBoat;
+    }
+
+    /**
+     * @return the inputManager
+     */
+    public InputManager getInputManager() {
+        return inputManager;
+    }
+
+    /**
+     * @return the playerUI
+     */
+    public PlayerUI getPlayerUI() {
+        return playerUI;
     }
 
 }

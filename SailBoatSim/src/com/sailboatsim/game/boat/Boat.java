@@ -8,12 +8,8 @@ import static com.jme3.math.FastMath.PI;
 import static com.jme3.math.FastMath.QUARTER_PI;
 import static com.jme3.math.FastMath.RAD_TO_DEG;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -34,7 +30,7 @@ import com.sailboatsim.utils.Utils;
  * @author eric
  * 
  */
-public class Boat implements ActionListener {
+public class Boat {
 
     private final BoatData    data;
 
@@ -82,12 +78,6 @@ public class Boat implements ActionListener {
 
         curSpeed = 0f;
         rotSpeed = 0f;
-
-        //keys
-        Map<String, Integer> keys = new HashMap<String, Integer>();
-        keys.put("Turn Left", KeyInput.KEY_J);
-        keys.put("Turn Right", KeyInput.KEY_K);
-        inGameState.registerKeys(keys, this);
     }
 
     public void setCourse(Course course) {
@@ -124,9 +114,6 @@ public class Boat implements ActionListener {
             curSpeed = 0.1f;
         }
 
-        //inGameState.display(" Speed " + (int) curSpeed + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(heading)) + " wind angle " + (int) (RAD_TO_DEG * windAspect) + " rel wind angle " + (int) (RAD_TO_DEG * relWindAngle) + "  rel wind "
-        //        + (int) windRelVector.length() + " Pos x=" + (int) (boatPos.x) + " Pos z=" + (int) (boatPos.z));
-
         if (left) {
             rotSpeed = FastMath.interpolateLinear(data.yawInertia, rotSpeed, -(FastMath.sqrt(curSpeed + 1f) + 0.5f) / 2.0f);
         } else if (right) {
@@ -152,7 +139,6 @@ public class Boat implements ActionListener {
         boatPos = boatPos.add(gd.mult(displacement));
         boatSpeed = gd.mult(curSpeed);
 
-        //boat.setLocalRotation(rot);
         rootBoat.setLocalTranslation(boatPos);
 
         // Display sails
@@ -206,14 +192,6 @@ public class Boat implements ActionListener {
      */
     public Node getBoat() {
         return rootBoat;
-    }
-
-    public void onAction(String name, boolean keyPressed, float tpf) {
-        if ("Turn Left".equals(name)) {
-            left = keyPressed;
-        } else if ("Turn Right".equals(name)) {
-            right = keyPressed;
-        }
     }
 
     public Vector3f getPos() {
@@ -294,5 +272,21 @@ public class Boat implements ActionListener {
      */
     public Vector3f getBoatSpeed() {
         return boatSpeed;
+    }
+
+    /**
+     * @param left
+     *            the left to set
+     */
+    protected void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    /**
+     * @param right
+     *            the right to set
+     */
+    protected void setRight(boolean right) {
+        this.right = right;
     }
 }

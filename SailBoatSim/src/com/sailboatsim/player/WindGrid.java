@@ -1,14 +1,10 @@
 /**
  * 
  */
-package com.sailboatsim.game.environment;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.sailboatsim.player;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -19,12 +15,14 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 import com.sailboatsim.game.InGameState;
+import com.sailboatsim.utils.KeyboardInput;
+import com.sailboatsim.utils.SimpleEventListener;
 
 /**
  * @author eric
  * 
  */
-public class WindGrid implements ActionListener {
+public class WindGrid implements SimpleEventListener {
     private final AssetManager assetManager;
     private final Node         gridRoot;
     private final InGameState  inGameState;
@@ -59,8 +57,6 @@ public class WindGrid implements ActionListener {
             }
         }
 
-        //System.out.println("i=" + i + "  nb=" + nb + " nb2=" + (nb * nb));
-
         int nbv = nb * nb * 4;
 
         int[] indices = new int[nbv];
@@ -84,10 +80,7 @@ public class WindGrid implements ActionListener {
     }
 
     private void registerDefaultKeys(InGameState inGameState) {
-        Map<String, Integer> keys = new HashMap<String, Integer>();
-        keys.put("Show grid", KeyInput.KEY_W);
-
-        inGameState.registerKeys(keys, this);
+        inGameState.getPlayerUI().registerKey("Show grid", KeyInput.KEY_W, this);
     }
 
     private void setVisibility() {
@@ -98,12 +91,14 @@ public class WindGrid implements ActionListener {
         }
     }
 
-    public void onAction(String name, boolean isPressed, float tpf) {
-        if ("Show grid".equals(name) && !isPressed) {
-            visible = !visible;
-            setVisibility();
+    public void onEvent(String name, Object eventData) {
+        if (eventData instanceof KeyboardInput) {
+            KeyboardInput input = (KeyboardInput) eventData;
+            if ("Show grid".equals(name) && !input.keyPressed) {
+                visible = !visible;
+                setVisibility();
+            }
         }
-
     }
 
 }
