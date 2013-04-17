@@ -21,20 +21,19 @@ import com.sailboatsim.utils.SimpleEventListener;
  * 
  */
 public class CamManager implements SimpleEventListener {
-    private final CameraNode  camNode;
+    private final CameraNode camNode;
     //private final Vector3f   initialPos    = new Vector3f(0, 10, -30);
-    private final Vector3f    initialPos    = new Vector3f(0, 20, -50);
-    private final Vector3f    topPos        = new Vector3f(0, 200, 0);
-    private Vector3f          currPos;
-    private float             zoomFactor    = 1.0f;
-    private final float       zoomFactorMin = 0.1f;
-    private final Boat        playerBoat;
-    private float             camHeading;
-    private float             headingOffset = 0;
-    private boolean           zoomIn        = false;
-    private boolean           zoomOut       = false;
-    private boolean           easeCam       = true;
-    private final InGameState inGameState;
+    private final Vector3f   initialPos    = new Vector3f(0, 20, -50);
+    private final Vector3f   topPos        = new Vector3f(0, 200, 0);
+    private Vector3f         currPos;
+    private float            zoomFactor    = 1.0f;
+    private final float      zoomFactorMin = 0.1f;
+    private final Boat       playerBoat;
+    private float            camHeading;
+    private float            headingOffset = 0;
+    private boolean          zoomIn        = false;
+    private boolean          zoomOut       = false;
+    private boolean          easeCam       = true;
 
     public CamManager(InGameState inGameState, Camera cam, FlyByCamera flyBy, Boat playerBoat) {
         // Disable the default fly by camera
@@ -51,7 +50,6 @@ public class CamManager implements SimpleEventListener {
         // Rotate the camNode to look at the target:
         camNode.lookAt(playerBoat.getPos(), Vector3f.UNIT_Y);
 
-        this.inGameState = inGameState;
         registerDefaultKeys(inGameState);
     }
 

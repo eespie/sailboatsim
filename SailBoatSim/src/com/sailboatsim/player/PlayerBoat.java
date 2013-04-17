@@ -23,6 +23,7 @@ public class PlayerBoat extends Boat implements SimpleEventListener {
 
         inGameState.getPlayerUI().registerKey("Turn Left", KeyInput.KEY_J, this);
         inGameState.getPlayerUI().registerKey("Turn Right", KeyInput.KEY_K, this);
+        inGameState.getPlayerUI().registerKey("Set Spinaker", KeyInput.KEY_S, this);
     }
 
     /* (non-Javadoc)
@@ -35,6 +36,8 @@ public class PlayerBoat extends Boat implements SimpleEventListener {
                 setLeft(input.keyPressed);
             } else if ("Turn Right".equals(name)) {
                 setRight(input.keyPressed);
+            } else if ("Set Spinaker".equals(name) && !input.keyPressed) {
+                setSpinaker(!hasSpinaker());
             }
         }
     }

@@ -101,4 +101,7 @@ public class WindGrid implements SimpleEventListener {
         }
     }
 
+    public void update(float tpf) {
+
+    }
 }

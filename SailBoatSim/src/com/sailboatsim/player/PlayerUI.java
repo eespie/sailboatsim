@@ -3,9 +3,6 @@
  */
 package com.sailboatsim.player;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
@@ -36,14 +33,13 @@ import com.sailboatsim.utils.Utils;
  * 
  */
 public class PlayerUI implements ActionListener {
-    private final InGameState          inGameState;
-    private Node                       gaugeNode;
-    private Node                       windNode;
-    private Node                       buoyNode;
-    private AssetManager               assetManager;
+    private final InGameState        inGameState;
+    private Node                     gaugeNode;
+    private Node                     windNode;
+    private Node                     buoyNode;
+    private AssetManager             assetManager;
     // Player input keys management
-    private final SimpleEventManager   eventManager = new SimpleEventManager();
-    private final Map<String, Integer> keys         = new HashMap<String, Integer>();
+    private final SimpleEventManager eventManager = new SimpleEventManager();
 
     // Called first (before other modules)
     public PlayerUI(InGameState inGameState) {
@@ -119,7 +115,7 @@ public class PlayerUI implements ActionListener {
         mesh.setBuffer(Type.Index, 3, BufferUtils.createIntBuffer(indexes));
         mesh.updateBound();
 
-        Geometry geo = new Geometry("OurMesh", mesh);
+        Geometry geo = new Geometry("arrow", mesh);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);
         geo.setMaterial(mat);
@@ -134,7 +130,6 @@ public class PlayerUI implements ActionListener {
      */
     public void registerKey(String event, int defaultKey, SimpleEventListener listener) {
         eventManager.register(event, listener);
-        keys.put(event, defaultKey);
         InputManager inputManager = inGameState.getInputManager();
         inputManager.addMapping(event, new KeyTrigger(defaultKey));
         inputManager.addListener(this, event);

@@ -130,6 +130,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         super.update(tpf);
 
         weather.update(tpf);
+        windGrid.update(tpf);
         playerBoat.update(tpf);
         camManager.update(tpf);
         playerUI.update(tpf);
