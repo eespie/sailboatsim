@@ -32,38 +32,37 @@ import com.sailboatsim.utils.Utils;
  */
 public class Boat {
 
-    private final BoatData    data;
+    private final BoatData       data;
 
-    private final Node        rootBoat;
-    private final Node        boat;
-    private final Node        camNode;
-    private final Spatial     boatModel;
-    private final InGameState inGameState;
+    private final Node           rootBoat;
+    private final Node           boat;
+    private final Node           camNode;
+    private final Spatial        boatModel;
+    protected final InGameState  inGameState;
 
-    private boolean           left        = false;
-    private boolean           right       = false;
+    protected boolean            left        = false;
+    protected boolean            right       = false;
 
-    private float             heading;
-    private float             pitch;
-    private float             roll;
-    private float             relWindAngle;
-    private float             curSpeed;
-    private final List<Node>  starboardSails;
-    private final List<Node>  portSails;
-    private final Node        spiSail;
-    private float             rotSpeed;
-    private boolean           hasSpinaker = false;
+    protected final BoatPosition position;
 
-    private BoatCourse        boatCourse;
+    private final List<Node>     starboardSails;
+    private final List<Node>     portSails;
+    private final Node           spiSail;
+    private boolean              hasSpinaker = false;
 
-    private float             windAspect;
-    private Vector3f          windRelVector;
-    private Vector3f          boatSpeed;
+    private BoatCourse           boatCourse;
+
+    private float                relWindAngle;
+    private float                windAspect;
+    private Vector3f             windRelVector;
+    private Vector3f             boatSpeed;
+
+    private boolean              finished    = false;
 
     public Boat(InGameState inGameState) {
+        this.inGameState = inGameState;
         data = BoatData.load("first");
 
-        this.inGameState = inGameState;
         rootBoat = new Node();
         camNode = new Node();
         rootBoat.attachChild(camNode);
@@ -76,8 +75,7 @@ public class Boat {
         portSails = boat.descendantMatches("sail.-2");
         spiSail = (Node) boat.descendantMatches("sail3").get(0);
 
-        curSpeed = 0f;
-        rotSpeed = 0f;
+        position = new BoatPosition(rootBoat.getLocalTranslation(), 0, 0, 0, 0, 0);
     }
 
     public void setCourse(Course course) {
@@ -90,56 +88,56 @@ public class Boat {
         }
         float inTpf = tpf * 1.50f;
 
-        Vector3f boatPos = rootBoat.getLocalTranslation();
-        Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(curSpeed);
+        Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(position.curSpeed);
 
-        Vector3f windVector = inGameState.getWeather().getWindComposant(boatPos);
+        Vector3f windVector = inGameState.getWeather().getWindComposant(position.boatPos);
         windRelVector = windVector.subtract(boatDir);
 
-        relWindAngle = FastMath.atan2(windRelVector.x, -windRelVector.z) - heading;
+        relWindAngle = FastMath.atan2(windRelVector.x, -windRelVector.z) - position.heading;
         relWindAngle = Utils.angleToMinusPiPi(relWindAngle);
 
         float relWindAbs = FastMath.abs(relWindAngle);
 
-        windAspect = Utils.angleToMinusPiPi(FastMath.atan2(windVector.x, -windVector.z) - heading);
+        windAspect = Utils.angleToMinusPiPi(FastMath.atan2(windVector.x, -windVector.z) - position.heading);
         float windSpeed = windVector.length();
         float targetSpeed = getSpeed(windAspect, windSpeed);
-        if (!inGameState.isWaterOk(boatPos, 2f)) {
+        if (!inGameState.isWaterOk(position.boatPos, 2f)) {
             targetSpeed /= 2.0f;
         }
 
-        curSpeed = FastMath.interpolateLinear(data.yawInertia, curSpeed, targetSpeed);
+        position.curSpeed = FastMath.interpolateLinear(data.yawInertia, position.curSpeed, targetSpeed);
 
-        if (!inGameState.isWaterOk(boatPos, 0)) {
-            curSpeed = 0.1f;
+        if (!inGameState.isWaterOk(position.boatPos, 0)) {
+            position.curSpeed = 0.1f;
         }
 
         if (left) {
-            rotSpeed = FastMath.interpolateLinear(data.yawInertia, rotSpeed, -(FastMath.sqrt(curSpeed + 1f) + 0.5f) / 2.0f);
+            position.rotSpeed = FastMath.interpolateLinear(data.yawInertia, position.rotSpeed, -(FastMath.sqrt(position.curSpeed + 1f) + 0.5f) / 2.0f);
         } else if (right) {
-            rotSpeed = FastMath.interpolateLinear(data.yawInertia, rotSpeed, (FastMath.sqrt(curSpeed + 1f) + 0.5f) / 2.0f);
+            position.rotSpeed = FastMath.interpolateLinear(data.yawInertia, position.rotSpeed, (FastMath.sqrt(position.curSpeed + 1f) + 0.5f) / 2.0f);
         } else {
-            rotSpeed = FastMath.interpolateLinear(0.05f, rotSpeed, 0);
+            position.rotSpeed = FastMath.interpolateLinear(0.05f, position.rotSpeed, 0);
         }
-        heading += inTpf * rotSpeed;
-        float displacement = inTpf * curSpeed * 2.0f;
+        position.heading += inTpf * position.rotSpeed;
+        float displacement = inTpf * position.curSpeed * 2.0f;
 
-        roll = FastMath.interpolateLinear(0.05f, roll, (FastMath.abs(windAspect) < QUARTER_PI ? windAspect / QUARTER_PI : (FastMath.sign(windAspect) * (PI - FastMath.abs(windAspect))) / (3 * QUARTER_PI)) * windRelVector.length() * DEG_TO_RAD);
+        position.roll = FastMath.interpolateLinear(0.05f, position.roll, (FastMath.abs(windAspect) < QUARTER_PI ? windAspect / QUARTER_PI : (FastMath.sign(windAspect) * (PI - FastMath.abs(windAspect))) / (3 * QUARTER_PI)) * windRelVector.length()
+                * DEG_TO_RAD);
 
-        pitch += inTpf * (1f + (curSpeed / (5f + FastMath.abs(windAspect))));
-        float pitchAngle = (5f - (windSpeed / 8f)) * DEG_TO_RAD * ((FastMath.sin(pitch) * FastMath.cos(pitch)) + FastMath.sin(pitch + (FastMath.abs(windAspect) / 2f)));
+        position.pitch += inTpf * (1f + (position.curSpeed / (5f + FastMath.abs(windAspect))));
+        float pitchAngle = (5f - (windSpeed / 8f)) * DEG_TO_RAD * ((FastMath.sin(position.pitch) * FastMath.cos(position.pitch)) + FastMath.sin(position.pitch + (FastMath.abs(windAspect) / 2f)));
 
-        Quaternion rot = new Quaternion().fromAngles(pitchAngle, -heading, -roll);
+        Quaternion rot = new Quaternion().fromAngles(pitchAngle, -position.heading, -position.roll);
 
         boat.setLocalRotation(rot);
 
         Vector3f ld = new Vector3f(0f, 0f, 1f);
-        rot = new Quaternion().fromAngleAxis(-heading, Vector3f.UNIT_Y);
+        rot = new Quaternion().fromAngleAxis(-position.heading, Vector3f.UNIT_Y);
         Vector3f gd = rot.mult(ld);
-        boatPos = boatPos.add(gd.mult(displacement));
-        boatSpeed = gd.mult(curSpeed);
+        position.boatPos = position.boatPos.add(gd.mult(displacement));
+        boatSpeed = gd.mult(position.curSpeed);
 
-        rootBoat.setLocalTranslation(boatPos);
+        rootBoat.setLocalTranslation(position.boatPos);
 
         // Display sails
         float sailRot = (relWindAbs < 0.60f ? (relWindAbs * 0.1f) / 0.6f : (0.51f * relWindAbs) - 0.21f);
@@ -168,7 +166,7 @@ public class Boat {
             spiSail.setCullHint(CullHint.Always);
         }
 
-        boatCourse.update(boatPos);
+        finished = boatCourse.update(position.boatPos);
     }
 
     private float getSpeed(float windAngle, float windSpeed) {
@@ -202,7 +200,7 @@ public class Boat {
      * @return the heading
      */
     public float getHeading() {
-        return heading;
+        return position.heading;
     }
 
     /**
@@ -235,7 +233,7 @@ public class Boat {
     }
 
     public void setPosition(Vector3f pos) {
-        rootBoat.setLocalTranslation(pos);
+        position.boatPos = pos;
     }
 
     /**
@@ -264,7 +262,7 @@ public class Boat {
      * @return the curSpeed
      */
     public float getCurSpeed() {
-        return FastMath.floor(curSpeed * 10.0f) / 10.0f;
+        return FastMath.floor(position.curSpeed * 10.0f) / 10.0f;
     }
 
     /**
@@ -275,18 +273,10 @@ public class Boat {
     }
 
     /**
-     * @param left
-     *            the left to set
+     * @return the finished
      */
-    protected void setLeft(boolean left) {
-        this.left = left;
+    public boolean hasFinished() {
+        return finished;
     }
 
-    /**
-     * @param right
-     *            the right to set
-     */
-    protected void setRight(boolean right) {
-        this.right = right;
-    }
 }

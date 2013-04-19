@@ -39,7 +39,6 @@ public class BoatCourse {
             index++;
             if (index == buoyList.size()) {
                 // finished
-                System.out.println("finished !!!!");
                 lastBuoyPassed = index - 1;
                 return true;
             }

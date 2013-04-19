@@ -62,6 +62,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     private Course             course;
     private PlayerUI           playerUI;
     private WindGrid           windGrid;
+    private float              gameTime;
 
     public InGameState(SimpleApplication app) {
         rootNode = app.getRootNode();
@@ -72,6 +73,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         viewPort = app.getViewPort();
         flyBy = app.getFlyByCamera();
         cam = app.getCamera();
+
     }
 
     @Override
@@ -121,6 +123,8 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
 
         windGrid = new WindGrid(this, rootNode, assetManager);
 
+        gameTime = 0;
+
         // LAST Action
         playerUI.init(playerBoat);
     }
@@ -128,6 +132,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     @Override
     public void update(float tpf) {
         super.update(tpf);
+        gameTime += tpf;
 
         weather.update(tpf);
         windGrid.update(tpf);
@@ -176,6 +181,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         playerUI.registerKey("Pause", KeyInput.KEY_P, this);
     }
 
+    @Override
     public void onEvent(String name, Object eventData) {
         if (eventData instanceof KeyboardInput) {
             KeyboardInput input = (KeyboardInput) eventData;
@@ -251,6 +257,13 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
      */
     public PlayerUI getPlayerUI() {
         return playerUI;
+    }
+
+    /**
+     * @return the gameTime
+     */
+    public float getGameTime() {
+        return gameTime;
     }
 
 }

@@ -167,6 +167,11 @@
 			<artifactId>xmlpull-xpp3</artifactId>
 			<version>3.0.0.20120512-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.msgpack</groupId>
+			<artifactId>msgpack</artifactId>
+			<version>0.6.7</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
