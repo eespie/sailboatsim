@@ -36,6 +36,7 @@ public class CamManager implements SimpleEventListener {
     private boolean          easeCam       = true;
 
     public CamManager(InGameState inGameState, Camera cam, FlyByCamera flyBy, Boat playerBoat) {
+        cam.setFrustumFar(5000f);
         // Disable the default fly by camera
         flyBy.setEnabled(false);
         // create the camera Node
@@ -63,6 +64,7 @@ public class CamManager implements SimpleEventListener {
         inGameState.getPlayerUI().registerKey("Zoom out", KeyInput.KEY_SUBTRACT, this);
     }
 
+    @Override
     public void onEvent(String name, Object eventData) {
         if (eventData instanceof KeyboardInput) {
             KeyboardInput input = (KeyboardInput) eventData;
