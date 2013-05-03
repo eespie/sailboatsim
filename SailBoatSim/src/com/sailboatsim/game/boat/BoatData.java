@@ -34,8 +34,8 @@ public class BoatData {
     /*
      * raw format: 
      * 6 kt
-     * 43.8¡ 3.46 5.34 5.71 6.01 5.95 5.69 5.46 4.81 4.01 3.48
-     * 142.7¡
+     * 43.8Â° 3.46 5.34 5.71 6.01 5.95 5.69 5.46 4.81 4.01 3.48
+     * 142.7Â°
      * 
      * angles are 52,60,75,90,110,120,135,150
      */
@@ -68,7 +68,7 @@ public class BoatData {
                 data.put(windSpeed, speedByAngle);
 
                 String[] values = lines.get(1).split(" ");
-                Integer angle = (int) FastMath.floor(Float.valueOf(values[0].replace("¡", "")));
+                Integer angle = (int) FastMath.floor(Float.valueOf(values[0].replace("ï¿½", "")));
                 Float value = Float.valueOf(values[1]) / FastMath.cos(angle * FastMath.DEG_TO_RAD);
                 speedByAngle.put(angle, value);
                 for (int index = 2; index < 10; index++) {
@@ -78,7 +78,7 @@ public class BoatData {
                     System.out.print(angle + ":" + value + " ");
                 }
 
-                angle = (int) FastMath.floor(Float.valueOf(lines.get(2).replace("¡", "")));
+                angle = (int) FastMath.floor(Float.valueOf(lines.get(2).replace("ï¿½", "")));
                 value = Float.valueOf(values[10]) / -FastMath.cos(angle * FastMath.DEG_TO_RAD);
                 speedByAngle.put(angle, value);
                 System.out.print(angle + ":" + value + " ");

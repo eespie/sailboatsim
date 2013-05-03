@@ -75,7 +75,7 @@ public class Boat {
         portSails = boat.descendantMatches("sail.-2");
         spiSail = (Node) boat.descendantMatches("sail3").get(0);
 
-        position = new BoatPosition(rootBoat.getLocalTranslation(), 0, 0, 0, 0, 0);
+        position = new BoatPosition(0, rootBoat.getLocalTranslation(), 0, 0, 0, 0, 0);
     }
 
     public void setCourse(Course course) {
