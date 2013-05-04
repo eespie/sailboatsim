@@ -19,7 +19,7 @@ import com.sailboatsim.utils.Conf;
  * @author eric
  * 
  */
-public class BoatData {
+public class DefaultBoatData {
 
     // Speed data: wind speed -> (angle, boat speed)
     protected Float[][]  speedData;
@@ -28,7 +28,7 @@ public class BoatData {
     protected Vector3f   modelLocalTranslation;
     protected float      yawInertia;
 
-    private BoatData() {
+    private DefaultBoatData() {
     }
 
     /*
@@ -136,8 +136,8 @@ public class BoatData {
             prevRawWS = rawWS;
         }
 
-        Conf<BoatData> conf = new Conf<BoatData>();
-        conf.save(this, "Boat", "First");
+        Conf<DefaultBoatData> conf = new Conf<DefaultBoatData>();
+        conf.save(this, "DefaultBoat", "First");
     }
 
     private void init() {
@@ -149,12 +149,12 @@ public class BoatData {
         yawInertia = 0.005f;
     }
 
-    public static BoatData load(String boatName) {
-        return new Conf<BoatData>().load("Boat", boatName);
+    public static DefaultBoatData load(String boatName) {
+        return new Conf<DefaultBoatData>().load("Boat", boatName);
     }
 
     public static void main(String[] args) throws IOException {
-        BoatData polarData = new BoatData();
+        DefaultBoatData polarData = new DefaultBoatData();
         polarData.init();
         polarData.convertRaw();
     }

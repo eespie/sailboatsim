@@ -9,7 +9,7 @@ import com.sailboatsim.utils.Conf;
  * @author eric
  * 
  */
-public class SceneryData {
+public class DefaultSceneryData {
     protected String matLighting;
     protected String matAlpha;
     protected String heightMap;
@@ -20,7 +20,7 @@ public class SceneryData {
     protected String textureNormalMap1;
     protected String textureNormalMap2;
 
-    private SceneryData() {
+    private DefaultSceneryData() {
     }
 
     private void init() {
@@ -35,15 +35,15 @@ public class SceneryData {
         textureNormalMap2 = "Textures/Terrain/splat/road_normal.png";
     }
 
-    public static SceneryData load(String scenery) {
-        return new Conf<SceneryData>().load("Scenery", scenery);
+    public static DefaultSceneryData load(String scenery) {
+        return new Conf<DefaultSceneryData>().load("Scenery", scenery);
     }
 
     public static void main(String[] args) {
-        SceneryData scenery = new SceneryData();
+        DefaultSceneryData scenery = new DefaultSceneryData();
         scenery.init();
 
-        new Conf<SceneryData>().save(scenery, "Scenery", "Island-e1");
+        new Conf<DefaultSceneryData>().save(scenery, "Scenery", "Island-e1");
     }
 
 }

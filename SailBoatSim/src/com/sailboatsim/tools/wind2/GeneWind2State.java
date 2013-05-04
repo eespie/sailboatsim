@@ -14,8 +14,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.sailboatsim.game.InGameState;
-import com.sailboatsim.game.environment.Scenery;
-import com.sailboatsim.game.environment.Weather;
+import com.sailboatsim.game.environment.DefaultScenery;
+import com.sailboatsim.game.environment.DefaultWeather;
 
 /**
  * @author eric
@@ -27,16 +27,16 @@ public class GeneWind2State extends InGameState {
         super(app);
     }
 
-    private Scenery scenery;
-    private Weather weather;
+    private DefaultScenery defaultScenery;
+    private DefaultWeather defaultWeather;
     private Camera  cam;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         //super.initialize(stateManager, app);
 
-        scenery = new Scenery(this, "Island-e1");
-        weather = new Weather(this, "sunny");
+        defaultScenery = new DefaultScenery(this, "Island-e1");
+        defaultWeather = new DefaultWeather(this, "sunny");
         createLight(getRootNode());
         new Wind2Grid(this, getRootNode(), getAssetManager());
 
@@ -51,7 +51,7 @@ public class GeneWind2State extends InGameState {
 
     @Override
     public float getTerrainHeight(Vector3f position) {
-        float height = scenery.getTerrain().getHeight(new Vector2f(position.x, position.z)) - 30f;
+        float height = defaultScenery.getTerrain().getHeight(new Vector2f(position.x, position.z)) - 30f;
         if (Float.isNaN(height) || (height < 0f)) {
             height = 0f;
         }
@@ -76,11 +76,11 @@ public class GeneWind2State extends InGameState {
     }
 
     /**
-     * @return the weather
+     * @return the defaultWeather
      */
     @Override
-    public Weather getWeather() {
-        return weather;
+    public DefaultWeather getWeather() {
+        return defaultWeather;
     }
 
 }

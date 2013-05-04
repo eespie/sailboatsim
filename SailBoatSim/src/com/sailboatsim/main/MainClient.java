@@ -8,7 +8,7 @@ import com.jme3.network.Client;
 import com.jme3.network.Network;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.InGameStateClient;
 import com.sailboatsim.utils.SBSNetwork;
 
 /**
@@ -25,7 +25,7 @@ public class MainClient extends SimpleApplication {
         AppSettings settings = new AppSettings(true);
         // settings.setResolution(1280, 720);
         // settings.setBitsPerPixel(32);
-        // settings.setTitle("Sail Boat Sim");
+        // settings.setTitle("Sail DefaultBoat Sim");
         try {
             settings.load("com.eboreal.sailboatsim");
             settings.save("com.eboreal.sailboatsim");
@@ -49,7 +49,7 @@ public class MainClient extends SimpleApplication {
             e.printStackTrace();
         }
 
-        InGameState inGameState = new InGameState(this);
+        InGameStateClient inGameState = new InGameStateClient(this, client);
         stateManager.attach(inGameState);
         pauseOnFocus = false;
     }

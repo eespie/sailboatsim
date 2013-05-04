@@ -16,8 +16,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.sailboatsim.game.InGameState;
-import com.sailboatsim.game.environment.Scenery;
-import com.sailboatsim.game.environment.Weather;
+import com.sailboatsim.game.environment.DefaultScenery;
+import com.sailboatsim.game.environment.DefaultWeather;
 
 /**
  * @author eric
@@ -29,8 +29,8 @@ public class GeneWindState extends InGameState {
         super(app);
     }
 
-    private Scenery scenery;
-    private Weather weather;
+    private DefaultScenery defaultScenery;
+    private DefaultWeather defaultWeather;
     private Camera  cam;
 
     private float   angle;
@@ -39,12 +39,12 @@ public class GeneWindState extends InGameState {
     public void initialize(AppStateManager stateManager, Application app) {
         //super.initialize(stateManager, app);
 
-        scenery = new Scenery(this, "Island-e1");
-        weather = new Weather(this, "sunny");
-        Vector3f wd = weather.getWindComposant(Vector3f.ZERO);
+        defaultScenery = new DefaultScenery(this, "Island-e1");
+        defaultWeather = new DefaultWeather(this, "sunny");
+        Vector3f wd = defaultWeather.getWindComposant(Vector3f.ZERO);
         angle = FastMath.atan2(wd.z, wd.x);
         //System.out.println("Angle = " + (FastMath.RAD_TO_DEG * angle));
-        scenery.getTerrain().setLocalRotation(new Quaternion().fromAngleAxis(-angle, Vector3f.UNIT_Y));
+        defaultScenery.getTerrain().setLocalRotation(new Quaternion().fromAngleAxis(-angle, Vector3f.UNIT_Y));
         createLight(getRootNode());
         new WindGrid(this, getRootNode(), getAssetManager());
 
@@ -59,7 +59,7 @@ public class GeneWindState extends InGameState {
 
     public float getHeight(Vector3f position) {
         Vector3f rotPos = new Quaternion().fromAngleAxis(angle, Vector3f.UNIT_Y).mult(position);
-        float height = scenery.getTerrain().getHeight(new Vector2f(rotPos.x, rotPos.z));
+        float height = defaultScenery.getTerrain().getHeight(new Vector2f(rotPos.x, rotPos.z));
         if (Float.isNaN(height)) {
             height = 0f;
         }
@@ -84,11 +84,11 @@ public class GeneWindState extends InGameState {
     }
 
     /**
-     * @return the weather
+     * @return the defaultWeather
      */
     @Override
-    public Weather getWeather() {
-        return weather;
+    public DefaultWeather getWeather() {
+        return defaultWeather;
     }
 
 }

@@ -19,13 +19,13 @@ import com.sailboatsim.game.InGameState;
  * @author eric
  * 
  */
-public class Scenery {
+public class DefaultScenery {
 
-    private final SceneryData data;
+    private final DefaultSceneryData data;
     private TerrainQuad       terrain;
 
-    public Scenery(InGameState inGameState, String scenery) {
-        data = SceneryData.load(scenery);
+    public DefaultScenery(InGameState inGameState, String scenery) {
+        data = DefaultSceneryData.load(scenery);
         init(inGameState);
     }
 

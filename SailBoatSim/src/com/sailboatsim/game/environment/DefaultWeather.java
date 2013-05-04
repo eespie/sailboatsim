@@ -1,5 +1,5 @@
 /**
- * Weather including wind, water (sea), sky and light
+ * DefaultWeather including wind, water (sea), sky and light
  */
 package com.sailboatsim.game.environment;
 
@@ -24,9 +24,9 @@ import com.sailboatsim.game.InGameState;
  * @author eric
  * 
  */
-public class Weather {
+public class DefaultWeather {
     protected WaterFilter     water;
-    private final WeatherData data;
+    private final DefaultWeatherData data;
     private boolean           plus  = false;
     private boolean           minus = false;
     private Vector3f          mainWindDir;
@@ -38,8 +38,8 @@ public class Weather {
     private float             coeffSum;
     private float             maxWindSpeed;
 
-    public Weather(InGameState inGameState, String weather) {
-        data = WeatherData.load(weather);
+    public DefaultWeather(InGameState inGameState, String weather) {
+        data = DefaultWeatherData.load(weather);
         this.inGameState = inGameState;
         init();
     }

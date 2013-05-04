@@ -13,9 +13,9 @@ public class BoatCourse {
     private final List<Buoy>           buoyList;
     private Buoy                       nextBuoy;
 
-    public BoatCourse(Course course) {
+    public BoatCourse(DefaultCourse defaultCourse) {
         states = new HashMap<Buoy, BuoyState>();
-        buoyList = course.getBuoyList();
+        buoyList = defaultCourse.getBuoyList();
         for (Buoy buoy : buoyList) {
             states.put(buoy, buoy.getState());
         }

@@ -1,4 +1,4 @@
-<com.sailboatsim.game.environment.SceneryData>
+<com.sailboatsim.game.environment.DefaultSceneryData>
   <matLighting>Common/MatDefs/Terrain/TerrainLighting.j3md</matLighting>
   <matAlpha>Textures/Terrain/splat/alphamap.png</matAlpha>
   <heightMap>Textures/Terrain/splat/TheIslandInLake512.png</heightMap>
@@ -8,4 +8,4 @@
   <textureNormalMap0>Textures/Terrain/splat/grass_normal.jpg</textureNormalMap0>
   <textureNormalMap1>Textures/Terrain/splat/dirt_normal.png</textureNormalMap1>
   <textureNormalMap2>Textures/Terrain/splat/road_normal.png</textureNormalMap2>
-</com.sailboatsim.game.environment.SceneryData>
+</com.sailboatsim.game.environment.DefaultSceneryData>

@@ -21,7 +21,7 @@ import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.shape.Quad;
 import com.jme3.util.BufferUtils;
 import com.sailboatsim.game.InGameState;
-import com.sailboatsim.game.boat.Boat;
+import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;
@@ -47,7 +47,7 @@ public class PlayerUI implements ActionListener {
     }
 
     // Called last (after all other modules init)
-    public void init(Boat playerBoat) {
+    public void init(DefaultBoat playerBoat) {
         gaugeNode = new Node("BoatGauge");
         playerBoat.getBoat().attachChild(gaugeNode);
 
@@ -83,7 +83,7 @@ public class PlayerUI implements ActionListener {
     }
 
     public void update(float tpf) {
-        Boat playerBoat = inGameState.getPlayerBoat();
+        DefaultBoat playerBoat = inGameState.getPlayerBoat();
         gaugeNode.setLocalRotation(new Quaternion().fromAngleAxis(-playerBoat.getHeading(), Vector3f.UNIT_Y));
         windNode.setLocalRotation(new Quaternion().fromAngleAxis(-playerBoat.getRelWindAspect(), Vector3f.UNIT_Y));
 

@@ -19,7 +19,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.course.BoatCourse;
 import com.sailboatsim.game.course.Buoy;
-import com.sailboatsim.game.course.Course;
+import com.sailboatsim.game.course.DefaultCourse;
 import com.sailboatsim.utils.Utils;
 
 /**
@@ -30,9 +30,9 @@ import com.sailboatsim.utils.Utils;
  * @author eric
  * 
  */
-public class Boat {
+public class DefaultBoat {
 
-    private final BoatData       data;
+    private final DefaultBoatData       data;
 
     private final Node           rootBoat;
     private final Node           boat;
@@ -59,9 +59,9 @@ public class Boat {
 
     private boolean              finished    = false;
 
-    public Boat(InGameState inGameState) {
+    public DefaultBoat(InGameState inGameState) {
         this.inGameState = inGameState;
-        data = BoatData.load("first");
+        data = DefaultBoatData.load("first");
 
         rootBoat = new Node();
         camNode = new Node();
@@ -78,8 +78,8 @@ public class Boat {
         position = new BoatPosition(0, rootBoat.getLocalTranslation(), 0, 0, 0, 0, 0);
     }
 
-    public void setCourse(Course course) {
-        boatCourse = new BoatCourse(course);
+    public void setCourse(DefaultCourse defaultCourse) {
+        boatCourse = new BoatCourse(defaultCourse);
     }
 
     public void update(float tpf) {

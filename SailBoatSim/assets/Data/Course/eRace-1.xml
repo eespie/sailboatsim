@@ -1,4 +1,4 @@
-<com.sailboatsim.game.course.Course>
+<com.sailboatsim.game.course.DefaultCourse>
   <mBuoyList>
     <com.sailboatsim.game.course.BuoyLine>
       <name>Start</name>
@@ -147,4 +147,4 @@
     <z>-250.0</z>
   </startPos>
   <startPosRadius>125.0</startPosRadius>
-</com.sailboatsim.game.course.Course>
+</com.sailboatsim.game.course.DefaultCourse>

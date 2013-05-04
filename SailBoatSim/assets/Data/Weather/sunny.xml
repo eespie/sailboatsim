@@ -1,4 +1,4 @@
-<com.sailboatsim.game.environment.WeatherData>
+<com.sailboatsim.game.environment.DefaultWeatherData>
   <lightDir>
     <x>-4.9</x>
     <y>-1.3</y>
@@ -9,4 +9,4 @@
   <textureWaterFoam>Common/MatDefs/Water/Textures/foam2.jpg</textureWaterFoam>
   <globalWindSpeed>20.0</globalWindSpeed>
   <globalWindDirection>3.1415927</globalWindDirection>
-</com.sailboatsim.game.environment.WeatherData>
+</com.sailboatsim.game.environment.DefaultWeatherData>

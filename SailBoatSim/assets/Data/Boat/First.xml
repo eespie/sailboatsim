@@ -1,4 +1,4 @@
-<com.sailboatsim.game.boat.BoatData>
+<com.sailboatsim.game.boat.DefaultBoatData>
   <speedData>
     <java.lang.Float-array>
       <float>0.0</float>
@@ -3863,4 +3863,4 @@
     <z>0.0</z>
   </modelLocalTranslation>
   <yawInertia>0.0050</yawInertia>
-</com.sailboatsim.game.boat.BoatData>
+</com.sailboatsim.game.boat.DefaultBoatData>

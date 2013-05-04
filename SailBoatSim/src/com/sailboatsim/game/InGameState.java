@@ -23,11 +23,11 @@ import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.sailboatsim.game.boat.Boat;
+import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.game.course.Buoy;
-import com.sailboatsim.game.course.Course;
-import com.sailboatsim.game.environment.Scenery;
-import com.sailboatsim.game.environment.Weather;
+import com.sailboatsim.game.course.DefaultCourse;
+import com.sailboatsim.game.environment.DefaultScenery;
+import com.sailboatsim.game.environment.DefaultWeather;
 import com.sailboatsim.player.CamManager;
 import com.sailboatsim.player.PlayerBoat;
 import com.sailboatsim.player.PlayerUI;
@@ -51,15 +51,15 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     private final Camera       cam;
     private CamManager         camManager;
 
-    private Boat               playerBoat;
+    private DefaultBoat               playerBoat;
     private boolean            isRunning = true;
     private Node               localGuiNode;
 
     private BitmapText         displaytext;
     private BitmapText         pausetext;
-    private Weather            weather;
-    private Scenery            scenery;
-    private Course             course;
+    private DefaultWeather            defaultWeather;
+    private DefaultScenery            defaultScenery;
+    private DefaultCourse             defaultCourse;
     private PlayerUI           playerUI;
     private WindGrid           windGrid;
     private float              gameTime;
@@ -91,19 +91,19 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         localGuiNode = new Node();
         guiNode.attachChild(localGuiNode);
 
-        scenery = new Scenery(this, "Island-e1");
+        defaultScenery = new DefaultScenery(this, "Island-e1");
 
-        course = Course.load("eRace-1");
-        course.init(this);
+        defaultCourse = DefaultCourse.load("eRace-1");
+        defaultCourse.init(this);
 
         playerBoat = new PlayerBoat(this);
-        playerBoat.setPosition(course.getARandomStartPos());
-        playerBoat.setCourse(course);
+        playerBoat.setPosition(defaultCourse.getARandomStartPos());
+        playerBoat.setCourse(defaultCourse);
         rootNode.attachChild(playerBoat.getBoat());
 
         camManager = new CamManager(this, cam, flyBy, playerBoat);
 
-        weather = new Weather(this, "sunny");
+        defaultWeather = new DefaultWeather(this, "sunny");
 
         setUpKeys();
 
@@ -134,7 +134,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         super.update(tpf);
         gameTime += tpf;
 
-        weather.update(tpf);
+        defaultWeather.update(tpf);
         windGrid.update(tpf);
         playerBoat.update(tpf);
         camManager.update(tpf);
@@ -159,7 +159,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     }
 
     public boolean isWaterOk(Vector3f position, float margin) {
-        float h = scenery.getTerrain().getHeight(new Vector2f(position.x, position.z));
+        float h = defaultScenery.getTerrain().getHeight(new Vector2f(position.x, position.z));
         if (Float.isNaN(h)) {
             return true;
         }
@@ -167,7 +167,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     }
 
     public float getTerrainHeight(Vector3f position) {
-        float height = scenery.getTerrain().getHeight(new Vector2f(position.x, position.z)) - 30f;
+        float height = defaultScenery.getTerrain().getHeight(new Vector2f(position.x, position.z)) - 30f;
         if (Float.isNaN(height) || (height < 0f)) {
             height = 0f;
         }
@@ -232,16 +232,16 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     }
 
     /**
-     * @return the weather
+     * @return the defaultWeather
      */
-    public Weather getWeather() {
-        return weather;
+    public DefaultWeather getWeather() {
+        return defaultWeather;
     }
 
     /**
      * @return the playerBoat
      */
-    public Boat getPlayerBoat() {
+    public DefaultBoat getPlayerBoat() {
         return playerBoat;
     }
 

@@ -5,7 +5,7 @@ package com.sailboatsim.player;
 
 import com.jme3.input.KeyInput;
 import com.sailboatsim.game.InGameState;
-import com.sailboatsim.game.boat.Boat;
+import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;
 
@@ -13,7 +13,7 @@ import com.sailboatsim.utils.SimpleEventListener;
  * @author eric
  * 
  */
-public class PlayerBoat extends Boat implements SimpleEventListener {
+public class PlayerBoat extends DefaultBoat implements SimpleEventListener {
     private final float lastGameTime = 0;
 
     /**

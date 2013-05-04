@@ -12,7 +12,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.sailboatsim.game.InGameState;
-import com.sailboatsim.game.boat.Boat;
+import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;
 
@@ -28,14 +28,14 @@ public class CamManager implements SimpleEventListener {
     private Vector3f         currPos;
     private float            zoomFactor    = 1.0f;
     private final float      zoomFactorMin = 0.1f;
-    private final Boat       playerBoat;
+    private final DefaultBoat       playerBoat;
     private float            camHeading;
     private float            headingOffset = 0;
     private boolean          zoomIn        = false;
     private boolean          zoomOut       = false;
     private boolean          easeCam       = true;
 
-    public CamManager(InGameState inGameState, Camera cam, FlyByCamera flyBy, Boat playerBoat) {
+    public CamManager(InGameState inGameState, Camera cam, FlyByCamera flyBy, DefaultBoat playerBoat) {
         cam.setFrustumFar(5000f);
         // Disable the default fly by camera
         flyBy.setEnabled(false);
