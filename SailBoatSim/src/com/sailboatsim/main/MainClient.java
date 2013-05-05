@@ -16,7 +16,8 @@ import com.sailboatsim.utils.SBSNetwork;
  */
 public class MainClient extends SimpleApplication {
 
-    private Client client;
+    private Client            client;
+    private InGameStateClient inGameState;
 
     public static void main(String[] args) {
         if (System.getProperty("javawebstart.version") != null) {
@@ -49,7 +50,7 @@ public class MainClient extends SimpleApplication {
             e.printStackTrace();
         }
 
-        InGameStateClient inGameState = new InGameStateClient(this, client);
+        inGameState = new InGameStateClient(this, client);
         stateManager.attach(inGameState);
         pauseOnFocus = false;
     }
@@ -59,6 +60,7 @@ public class MainClient extends SimpleApplication {
         if (client != null) {
             client.close();
         }
+        inGameState.setRunning(false);
         super.destroy();
     }
 }

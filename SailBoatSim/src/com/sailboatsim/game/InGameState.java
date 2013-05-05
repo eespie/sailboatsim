@@ -3,8 +3,6 @@
  */
 package com.sailboatsim.game;
 
-import static com.jme3.math.FastMath.RAD_TO_DEG;
-
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -14,55 +12,44 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.math.FastMath;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.sailboatsim.game.boat.DefaultBoat;
-import com.sailboatsim.game.course.Buoy;
+import com.sailboatsim.game.course.Course;
 import com.sailboatsim.game.course.DefaultCourse;
 import com.sailboatsim.game.environment.DefaultScenery;
 import com.sailboatsim.game.environment.DefaultWeather;
-import com.sailboatsim.player.CamManager;
-import com.sailboatsim.player.PlayerBoat;
-import com.sailboatsim.player.PlayerUI;
-import com.sailboatsim.player.WindGrid;
+import com.sailboatsim.game.environment.Scenery;
+import com.sailboatsim.game.environment.Weather;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;
-import com.sailboatsim.utils.Utils;
 
 /**
  * @author eric
  * 
  */
 public class InGameState extends AbstractAppState implements SimpleEventListener {
-    private final Node         rootNode;
-    private final Node         guiNode;
-    private final AssetManager assetManager;
+    private final Node          rootNode;
+    private final Node          guiNode;
+    private final AssetManager  assetManager;
     // private final AppStateManager stateManager;
-    private final InputManager inputManager;
-    private final ViewPort     viewPort;
-    private final FlyByCamera  flyBy;
-    private final Camera       cam;
-    private CamManager         camManager;
+    private final InputManager  inputManager;
+    private final ViewPort      viewPort;
+    protected final FlyByCamera flyBy;
+    protected final Camera      cam;
 
-    private DefaultBoat               playerBoat;
-    private boolean            isRunning = true;
-    private Node               localGuiNode;
+    private boolean             isRunning = true;
+    private Node                localGuiNode;
 
-    private BitmapText         displaytext;
-    private BitmapText         pausetext;
-    private DefaultWeather            defaultWeather;
-    private DefaultScenery            defaultScenery;
-    private DefaultCourse             defaultCourse;
-    private PlayerUI           playerUI;
-    private WindGrid           windGrid;
-    private float              gameTime;
+    private BitmapText          displaytext;
+    private BitmapText          pausetext;
+    private Weather             weather;
+    private Scenery             scenery;
+    protected Course            course;
+    private float               gameTime;
 
     public InGameState(SimpleApplication app) {
         rootNode = app.getRootNode();
@@ -73,15 +60,11 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         viewPort = app.getViewPort();
         flyBy = app.getFlyByCamera();
         cam = app.getCamera();
-
     }
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-
-        // FIRST Action
-        playerUI = new PlayerUI(this);
 
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
         BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
@@ -91,21 +74,12 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         localGuiNode = new Node();
         guiNode.attachChild(localGuiNode);
 
-        defaultScenery = new DefaultScenery(this, "Island-e1");
+        scenery = new DefaultScenery(this, "Island-e1");
 
-        defaultCourse = DefaultCourse.load("eRace-1");
-        defaultCourse.init(this);
+        weather = new DefaultWeather(this, "sunny");
 
-        playerBoat = new PlayerBoat(this);
-        playerBoat.setPosition(defaultCourse.getARandomStartPos());
-        playerBoat.setCourse(defaultCourse);
-        rootNode.attachChild(playerBoat.getBoat());
-
-        camManager = new CamManager(this, cam, flyBy, playerBoat);
-
-        defaultWeather = new DefaultWeather(this, "sunny");
-
-        setUpKeys();
+        course = DefaultCourse.load("eRace-1");
+        course.init(this);
 
         /** Load the HUD */
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -121,12 +95,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         pausetext.setText("");
         localGuiNode.attachChild(pausetext);
 
-        windGrid = new WindGrid(this, rootNode, assetManager);
-
         gameTime = 0;
-
-        // LAST Action
-        playerUI.init(playerBoat);
     }
 
     @Override
@@ -134,51 +103,13 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         super.update(tpf);
         gameTime += tpf;
 
-        defaultWeather.update(tpf);
-        windGrid.update(tpf);
-        playerBoat.update(tpf);
-        camManager.update(tpf);
-        playerUI.update(tpf);
-
-        Buoy nextBuoy = playerBoat.getNextBuoy();
-        if (nextBuoy != null) {
-            Vector3f buoyPos = nextBuoy.getPos();
-            Vector3f toNextBuoy = buoyPos.subtract(playerBoat.getPos());
-            Vector3f toNextBuoyNorm = toNextBuoy.normalize();
-            float toBuoySpeed = playerBoat.getBoatSpeed().dot(toNextBuoyNorm);
-            Vector3f boatSpeedNorm = playerBoat.getBoatSpeed().normalize();
-            float buoyAngle = FastMath.RAD_TO_DEG * Utils.angleToMinusPiPi((FastMath.atan2(toNextBuoyNorm.z, toNextBuoyNorm.x) - FastMath.atan2(boatSpeedNorm.z, boatSpeedNorm.x)));
-
-            display("Speed " + playerBoat.getCurSpeed() + "kts Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
-                    + (int) playerBoat.getRelWindSpeed() + " Next Buoy " + (int) toNextBuoy.length() + "m at " + (int) buoyAngle + " spd " + (FastMath.floor(toBuoySpeed * 10f) / 10f) + "kts");
-        } else {
-            display("Speed " + playerBoat.getCurSpeed() + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
-                    + (int) playerBoat.getRelWindSpeed());
-        }
+        weather.update(tpf);
 
     }
 
     public boolean isWaterOk(Vector3f position, float margin) {
-        float h = defaultScenery.getTerrain().getHeight(new Vector2f(position.x, position.z));
-        if (Float.isNaN(h)) {
-            return true;
-        }
-        return h < (30f - margin);
-    }
-
-    public float getTerrainHeight(Vector3f position) {
-        float height = defaultScenery.getTerrain().getHeight(new Vector2f(position.x, position.z)) - 30f;
-        if (Float.isNaN(height) || (height < 0f)) {
-            height = 0f;
-        }
-        return height;
-    }
-
-    /**
-     * We over-write some navigation key mappings here
-     */
-    private void setUpKeys() {
-        playerUI.registerKey("Pause", KeyInput.KEY_P, this);
+        float h = scenery.getTerrainHeight(position);
+        return h < -margin;
     }
 
     @Override
@@ -232,17 +163,10 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     }
 
     /**
-     * @return the defaultWeather
+     * @return the weather
      */
-    public DefaultWeather getWeather() {
-        return defaultWeather;
-    }
-
-    /**
-     * @return the playerBoat
-     */
-    public DefaultBoat getPlayerBoat() {
-        return playerBoat;
+    public Weather getWeather() {
+        return weather;
     }
 
     /**
@@ -253,17 +177,14 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     }
 
     /**
-     * @return the playerUI
-     */
-    public PlayerUI getPlayerUI() {
-        return playerUI;
-    }
-
-    /**
      * @return the gameTime
      */
     public float getGameTime() {
         return gameTime;
+    }
+
+    public Scenery getScenery() {
+        return scenery;
     }
 
 }

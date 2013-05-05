@@ -13,7 +13,7 @@ public class BoatCourse {
     private final List<Buoy>           buoyList;
     private Buoy                       nextBuoy;
 
-    public BoatCourse(DefaultCourse defaultCourse) {
+    public BoatCourse(Course defaultCourse) {
         states = new HashMap<Buoy, BuoyState>();
         buoyList = defaultCourse.getBuoyList();
         for (Buoy buoy : buoyList) {

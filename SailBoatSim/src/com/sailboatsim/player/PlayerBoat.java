@@ -4,7 +4,7 @@
 package com.sailboatsim.player;
 
 import com.jme3.input.KeyInput;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.InGameStateClient;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;
@@ -14,17 +14,16 @@ import com.sailboatsim.utils.SimpleEventListener;
  * 
  */
 public class PlayerBoat extends DefaultBoat implements SimpleEventListener {
-    private final float lastGameTime = 0;
 
     /**
-     * @param inGameState
+     * @param inGameStateClient
      */
-    public PlayerBoat(InGameState inGameState) {
-        super(inGameState);
+    public PlayerBoat(InGameStateClient inGameStateClient) {
+        super(inGameStateClient);
 
-        inGameState.getPlayerUI().registerKey("Turn Left", KeyInput.KEY_J, this);
-        inGameState.getPlayerUI().registerKey("Turn Right", KeyInput.KEY_K, this);
-        inGameState.getPlayerUI().registerKey("Set Spinaker", KeyInput.KEY_S, this);
+        inGameStateClient.getPlayerUI().registerKey("Turn Left", KeyInput.KEY_J, this);
+        inGameStateClient.getPlayerUI().registerKey("Turn Right", KeyInput.KEY_K, this);
+        inGameStateClient.getPlayerUI().registerKey("Set Spinaker", KeyInput.KEY_S, this);
     }
 
     /* (non-Javadoc)
@@ -46,21 +45,6 @@ public class PlayerBoat extends DefaultBoat implements SimpleEventListener {
 
     @Override
     public void update(float tpf) {
-        float gameTime = inGameState.getGameTime();
         super.update(tpf);
-    }
-
-    static class KeyLogger {
-        public float   gameTime;
-        public boolean left;
-        public boolean right;
-        public float   tpf;
-
-        public KeyLogger(float gameTime, boolean left, boolean right, float tpf) {
-            this.gameTime = gameTime;
-            this.left = left;
-            this.right = right;
-            this.tpf = tpf;
-        }
     }
 }

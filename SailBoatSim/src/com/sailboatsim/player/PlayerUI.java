@@ -20,7 +20,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.shape.Quad;
 import com.jme3.util.BufferUtils;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.InGameStateClient;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.utils.KeyboardInput;
@@ -33,7 +33,7 @@ import com.sailboatsim.utils.Utils;
  * 
  */
 public class PlayerUI implements ActionListener {
-    private final InGameState        inGameState;
+    private final InGameStateClient  inGameStateClient;
     private Node                     gaugeNode;
     private Node                     windNode;
     private Node                     buoyNode;
@@ -42,8 +42,8 @@ public class PlayerUI implements ActionListener {
     private final SimpleEventManager eventManager = new SimpleEventManager();
 
     // Called first (before other modules)
-    public PlayerUI(InGameState inGameState) {
-        this.inGameState = inGameState;
+    public PlayerUI(InGameStateClient inGameStateClient) {
+        this.inGameStateClient = inGameStateClient;
     }
 
     // Called last (after all other modules init)
@@ -54,7 +54,7 @@ public class PlayerUI implements ActionListener {
         // Create gauge
         Quad quad = new Quad(20f, 20f);
         Geometry geom = new Geometry("square", quad);
-        assetManager = inGameState.getAssetManager();
+        assetManager = inGameStateClient.getAssetManager();
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md"); // create a simple material
         mat.setTexture("ColorMap", assetManager.loadTexture("Textures/gauge.png"));
         mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
@@ -83,7 +83,7 @@ public class PlayerUI implements ActionListener {
     }
 
     public void update(float tpf) {
-        DefaultBoat playerBoat = inGameState.getPlayerBoat();
+        DefaultBoat playerBoat = inGameStateClient.getPlayerBoat();
         gaugeNode.setLocalRotation(new Quaternion().fromAngleAxis(-playerBoat.getHeading(), Vector3f.UNIT_Y));
         windNode.setLocalRotation(new Quaternion().fromAngleAxis(-playerBoat.getRelWindAspect(), Vector3f.UNIT_Y));
 
@@ -130,12 +130,13 @@ public class PlayerUI implements ActionListener {
      */
     public void registerKey(String event, int defaultKey, SimpleEventListener listener) {
         eventManager.register(event, listener);
-        InputManager inputManager = inGameState.getInputManager();
+        InputManager inputManager = inGameStateClient.getInputManager();
         inputManager.addMapping(event, new KeyTrigger(defaultKey));
         inputManager.addListener(this, event);
     }
 
     // On keyboard input
+    @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
         KeyboardInput input = new KeyboardInput(name, keyPressed, tpf);
         eventManager.triggerEvent(name, input);

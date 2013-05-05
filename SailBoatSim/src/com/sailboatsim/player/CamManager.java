@@ -11,7 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl.ControlDirection;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.InGameStateClient;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;
@@ -21,21 +21,21 @@ import com.sailboatsim.utils.SimpleEventListener;
  * 
  */
 public class CamManager implements SimpleEventListener {
-    private final CameraNode camNode;
+    private final CameraNode  camNode;
     //private final Vector3f   initialPos    = new Vector3f(0, 10, -30);
-    private final Vector3f   initialPos    = new Vector3f(0, 20, -50);
-    private final Vector3f   topPos        = new Vector3f(0, 200, 0);
-    private Vector3f         currPos;
-    private float            zoomFactor    = 1.0f;
-    private final float      zoomFactorMin = 0.1f;
-    private final DefaultBoat       playerBoat;
-    private float            camHeading;
-    private float            headingOffset = 0;
-    private boolean          zoomIn        = false;
-    private boolean          zoomOut       = false;
-    private boolean          easeCam       = true;
+    private final Vector3f    initialPos    = new Vector3f(0, 20, -50);
+    private final Vector3f    topPos        = new Vector3f(0, 200, 0);
+    private Vector3f          currPos;
+    private float             zoomFactor    = 1.0f;
+    private final float       zoomFactorMin = 0.1f;
+    private final DefaultBoat playerBoat;
+    private float             camHeading;
+    private float             headingOffset = 0;
+    private boolean           zoomIn        = false;
+    private boolean           zoomOut       = false;
+    private boolean           easeCam       = true;
 
-    public CamManager(InGameState inGameState, Camera cam, FlyByCamera flyBy, DefaultBoat playerBoat) {
+    public CamManager(InGameStateClient inGameStateClient, Camera cam, FlyByCamera flyBy, DefaultBoat playerBoat) {
         cam.setFrustumFar(5000f);
         // Disable the default fly by camera
         flyBy.setEnabled(false);
@@ -51,17 +51,17 @@ public class CamManager implements SimpleEventListener {
         // Rotate the camNode to look at the target:
         camNode.lookAt(playerBoat.getPos(), Vector3f.UNIT_Y);
 
-        registerDefaultKeys(inGameState);
+        registerDefaultKeys(inGameStateClient);
     }
 
-    private void registerDefaultKeys(InGameState inGameState) {
-        inGameState.getPlayerUI().registerKey("Look Left", KeyInput.KEY_NUMPAD4, this);
-        inGameState.getPlayerUI().registerKey("Look Right", KeyInput.KEY_NUMPAD6, this);
-        inGameState.getPlayerUI().registerKey("Look Front", KeyInput.KEY_NUMPAD8, this);
-        inGameState.getPlayerUI().registerKey("Reset view", KeyInput.KEY_NUMPAD2, this);
-        inGameState.getPlayerUI().registerKey("Look Down", KeyInput.KEY_NUMPAD5, this);
-        inGameState.getPlayerUI().registerKey("Zoom in", KeyInput.KEY_ADD, this);
-        inGameState.getPlayerUI().registerKey("Zoom out", KeyInput.KEY_SUBTRACT, this);
+    private void registerDefaultKeys(InGameStateClient inGameStateClient) {
+        inGameStateClient.getPlayerUI().registerKey("Look Left", KeyInput.KEY_NUMPAD4, this);
+        inGameStateClient.getPlayerUI().registerKey("Look Right", KeyInput.KEY_NUMPAD6, this);
+        inGameStateClient.getPlayerUI().registerKey("Look Front", KeyInput.KEY_NUMPAD8, this);
+        inGameStateClient.getPlayerUI().registerKey("Reset view", KeyInput.KEY_NUMPAD2, this);
+        inGameStateClient.getPlayerUI().registerKey("Look Down", KeyInput.KEY_NUMPAD5, this);
+        inGameStateClient.getPlayerUI().registerKey("Zoom in", KeyInput.KEY_ADD, this);
+        inGameStateClient.getPlayerUI().registerKey("Zoom out", KeyInput.KEY_SUBTRACT, this);
     }
 
     @Override

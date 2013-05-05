@@ -19,48 +19,47 @@ import com.jme3.scene.Spatial.CullHint;
 import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.course.BoatCourse;
 import com.sailboatsim.game.course.Buoy;
-import com.sailboatsim.game.course.DefaultCourse;
+import com.sailboatsim.game.course.Course;
+import com.sailboatsim.game.environment.Weather;
 import com.sailboatsim.utils.Utils;
 
 /**
  * @author eric
  * 
  */
-/**
- * @author eric
- * 
- */
-public class DefaultBoat {
+public class DefaultBoat implements Boat {
 
-    private final DefaultBoatData       data;
+    private final DefaultBoatData data;
 
-    private final Node           rootBoat;
-    private final Node           boat;
-    private final Node           camNode;
-    private final Spatial        boatModel;
-    protected final InGameState  inGameState;
+    private final Node            rootBoat;
+    private final Node            boat;
+    private final Node            camNode;
+    private final Spatial         boatModel;
+    protected final InGameState   inGameState;
 
-    protected boolean            left        = false;
-    protected boolean            right       = false;
+    protected boolean             left        = false;
+    protected boolean             right       = false;
 
-    protected final BoatPosition position;
+    protected final BoatPosition  position;
 
-    private final List<Node>     starboardSails;
-    private final List<Node>     portSails;
-    private final Node           spiSail;
-    private boolean              hasSpinaker = false;
+    private final List<Node>      starboardSails;
+    private final List<Node>      portSails;
+    private final Node            spiSail;
+    private boolean               hasSpinaker = false;
 
-    private BoatCourse           boatCourse;
+    private BoatCourse            boatCourse;
+    private final Weather         weather;
 
-    private float                relWindAngle;
-    private float                windAspect;
-    private Vector3f             windRelVector;
-    private Vector3f             boatSpeed;
+    private float                 relWindAngle;
+    private float                 windAspect;
+    private Vector3f              windRelVector;
+    private Vector3f              boatSpeed;
 
-    private boolean              finished    = false;
+    private boolean               finished    = false;
 
     public DefaultBoat(InGameState inGameState) {
         this.inGameState = inGameState;
+        weather = inGameState.getWeather();
         data = DefaultBoatData.load("first");
 
         rootBoat = new Node();
@@ -78,10 +77,14 @@ public class DefaultBoat {
         position = new BoatPosition(0, rootBoat.getLocalTranslation(), 0, 0, 0, 0, 0);
     }
 
-    public void setCourse(DefaultCourse defaultCourse) {
+    public void setCourse(Course defaultCourse) {
         boatCourse = new BoatCourse(defaultCourse);
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.boat.Boat#update(float)
+     */
+    @Override
     public void update(float tpf) {
         if (!inGameState.isRunning()) {
             return;
@@ -90,7 +93,7 @@ public class DefaultBoat {
 
         Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(position.curSpeed);
 
-        Vector3f windVector = inGameState.getWeather().getWindComposant(position.boatPos);
+        Vector3f windVector = weather.getWindComposant(position.boatPos);
         windRelVector = windVector.subtract(boatDir);
 
         relWindAngle = FastMath.atan2(windRelVector.x, -windRelVector.z) - position.heading;
@@ -192,6 +195,10 @@ public class DefaultBoat {
         return rootBoat;
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.boat.Boat#getPos()
+     */
+    @Override
     public Vector3f getPos() {
         return rootBoat.getLocalTranslation();
     }
@@ -225,35 +232,42 @@ public class DefaultBoat {
         this.hasSpinaker = hasSpinaker;
     }
 
-    /**
-     * @return the camNode
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.boat.Boat#getCamNode()
      */
+    @Override
     public Node getCamNode() {
         return camNode;
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.boat.Boat#setPosition(com.jme3.math.Vector3f)
+     */
+    @Override
     public void setPosition(Vector3f pos) {
         position.boatPos = pos;
     }
 
-    /**
-     * @return
-     * @see com.sailboatsim.game.course.BoatCourse#getNextBuoy()
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.boat.Boat#getNextBuoy()
      */
+    @Override
     public Buoy getNextBuoy() {
         return boatCourse.getNextBuoy();
     }
 
-    /**
-     * @return the windAspect -PI to PI
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.boat.Boat#getRelWindAspect()
      */
+    @Override
     public float getRelWindAspect() {
         return relWindAngle;
     }
 
-    /**
-     * @return relative wind speed
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.boat.Boat#getRelWindSpeed()
      */
+    @Override
     public float getRelWindSpeed() {
         return windRelVector.length();
     }
@@ -277,6 +291,40 @@ public class DefaultBoat {
      */
     public boolean hasFinished() {
         return finished;
+    }
+
+    /**
+     * @return the left
+     */
+    @Override
+    public boolean getLeft() {
+        return left;
+    }
+
+    /**
+     * @param left
+     *            the left to set
+     */
+    @Override
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    /**
+     * @return the right
+     */
+    @Override
+    public boolean getRight() {
+        return right;
+    }
+
+    /**
+     * @param right
+     *            the right to set
+     */
+    @Override
+    public void setRight(boolean right) {
+        this.right = right;
     }
 
 }

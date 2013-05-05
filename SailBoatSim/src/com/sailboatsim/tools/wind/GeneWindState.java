@@ -11,13 +11,13 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.environment.DefaultScenery;
 import com.sailboatsim.game.environment.DefaultWeather;
+import com.sailboatsim.game.environment.Weather;
 
 /**
  * @author eric
@@ -31,9 +31,9 @@ public class GeneWindState extends InGameState {
 
     private DefaultScenery defaultScenery;
     private DefaultWeather defaultWeather;
-    private Camera  cam;
+    private Camera         cam;
 
-    private float   angle;
+    private float          angle;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -44,7 +44,7 @@ public class GeneWindState extends InGameState {
         Vector3f wd = defaultWeather.getWindComposant(Vector3f.ZERO);
         angle = FastMath.atan2(wd.z, wd.x);
         //System.out.println("Angle = " + (FastMath.RAD_TO_DEG * angle));
-        defaultScenery.getTerrain().setLocalRotation(new Quaternion().fromAngleAxis(-angle, Vector3f.UNIT_Y));
+        //defaultScenery.getTerrain().setLocalRotation(new Quaternion().fromAngleAxis(-angle, Vector3f.UNIT_Y));
         createLight(getRootNode());
         new WindGrid(this, getRootNode(), getAssetManager());
 
@@ -59,9 +59,9 @@ public class GeneWindState extends InGameState {
 
     public float getHeight(Vector3f position) {
         Vector3f rotPos = new Quaternion().fromAngleAxis(angle, Vector3f.UNIT_Y).mult(position);
-        float height = defaultScenery.getTerrain().getHeight(new Vector2f(rotPos.x, rotPos.z));
-        if (Float.isNaN(height)) {
-            height = 0f;
+        float height = defaultScenery.getTerrainHeight(rotPos);
+        if (height < 0) {
+            height = 0;
         }
         return height;
     }
@@ -87,7 +87,7 @@ public class GeneWindState extends InGameState {
      * @return the defaultWeather
      */
     @Override
-    public DefaultWeather getWeather() {
+    public Weather getWeather() {
         return defaultWeather;
     }
 

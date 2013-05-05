@@ -9,13 +9,13 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.environment.DefaultScenery;
 import com.sailboatsim.game.environment.DefaultWeather;
+import com.sailboatsim.game.environment.Weather;
 
 /**
  * @author eric
@@ -27,16 +27,15 @@ public class GeneWind2State extends InGameState {
         super(app);
     }
 
-    private DefaultScenery defaultScenery;
-    private DefaultWeather defaultWeather;
+    private Weather weather;
     private Camera  cam;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         //super.initialize(stateManager, app);
 
-        defaultScenery = new DefaultScenery(this, "Island-e1");
-        defaultWeather = new DefaultWeather(this, "sunny");
+        new DefaultScenery(this, "Island-e1");
+        weather = new DefaultWeather(this, "sunny");
         createLight(getRootNode());
         new Wind2Grid(this, getRootNode(), getAssetManager());
 
@@ -47,15 +46,6 @@ public class GeneWind2State extends InGameState {
         //cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
         cam.setAxes(new Vector3f(1, 0, 0), new Vector3f(0, 0, 1), new Vector3f(0, -1, 0));
         cam.update();
-    }
-
-    @Override
-    public float getTerrainHeight(Vector3f position) {
-        float height = defaultScenery.getTerrain().getHeight(new Vector2f(position.x, position.z)) - 30f;
-        if (Float.isNaN(height) || (height < 0f)) {
-            height = 0f;
-        }
-        return height;
     }
 
     @Override
@@ -76,11 +66,11 @@ public class GeneWind2State extends InGameState {
     }
 
     /**
-     * @return the defaultWeather
+     * @return the weather
      */
     @Override
-    public DefaultWeather getWeather() {
-        return defaultWeather;
+    public Weather getWeather() {
+        return weather;
     }
 
 }

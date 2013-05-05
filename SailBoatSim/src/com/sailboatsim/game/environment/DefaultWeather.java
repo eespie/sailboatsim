@@ -24,27 +24,27 @@ import com.sailboatsim.game.InGameState;
  * @author eric
  * 
  */
-public class DefaultWeather {
-    protected WaterFilter     water;
+public class DefaultWeather implements Weather {
+    protected WaterFilter            water;
     private final DefaultWeatherData data;
-    private boolean           plus  = false;
-    private boolean           minus = false;
-    private Vector3f          mainWindDir;
-    private final InGameState inGameState;
-    private int               stepAngleDeg;
-    private int               stepDisplacement;
-    private int               maxDisplacement;
-    private int               nbDisplacementStep;
-    private float             coeffSum;
-    private float             maxWindSpeed;
+    private boolean                  plus  = false;
+    private boolean                  minus = false;
+    private Vector3f                 mainWindDir;
+    private int                      stepAngleDeg;
+    private int                      stepDisplacement;
+    private int                      maxDisplacement;
+    private int                      nbDisplacementStep;
+    private float                    coeffSum;
+    private float                    maxWindSpeed;
+    private final Scenery            scenery;
 
     public DefaultWeather(InGameState inGameState, String weather) {
         data = DefaultWeatherData.load(weather);
-        this.inGameState = inGameState;
-        init();
+        scenery = inGameState.getScenery();
+        init(inGameState);
     }
 
-    private void init() {
+    private void init(InGameState inGameState) {
         createLight(inGameState.getRootNode());
         createWater(inGameState.getRootNode(), inGameState.getAssetManager(), inGameState.getViewPort());
         createSky(inGameState.getRootNode(), inGameState.getAssetManager());
@@ -56,6 +56,10 @@ public class DefaultWeather {
         maxWindSpeed = data.globalWindSpeed + 5f;
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.environment.Weather#getWindComposant(com.jme3.math.Vector3f)
+     */
+    @Override
     public Vector3f getWindComposant(Vector3f location) {
         Vector3f currWind = mainWindDir.mult(data.globalWindSpeed);
         //Vector3f currWind = new Vector3f(0, 0, 0);
@@ -68,7 +72,10 @@ public class DefaultWeather {
                     continue;
                 }
                 Vector3f posToExplore = location.add(dirToExplore.mult(displacement));
-                float height = inGameState.getTerrainHeight(posToExplore);
+                float height = scenery.getTerrainHeight(posToExplore);
+                if (height < 0) {
+                    height = 0;
+                }
                 heightCoeff += FastMath.abs((float) stepDisplacement / (float) displacement) * height;
             }
             heightCoeff = (heightCoeff * data.globalWindSpeed) / coeffSum;
@@ -85,6 +92,10 @@ public class DefaultWeather {
         return currWind;
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.environment.Weather#update(float)
+     */
+    @Override
     public void update(float tpf) {
 
         if (plus) {

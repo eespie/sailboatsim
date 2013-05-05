@@ -14,7 +14,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.InGameStateClient;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;
 
@@ -23,13 +23,13 @@ import com.sailboatsim.utils.SimpleEventListener;
  * 
  */
 public class WindGrid implements SimpleEventListener {
-    private final AssetManager assetManager;
-    private final Node         gridRoot;
-    private final InGameState  inGameState;
-    private boolean            visible = false;
+    private final AssetManager      assetManager;
+    private final Node              gridRoot;
+    private final InGameStateClient inGameStateClient;
+    private boolean                 visible = false;
 
-    public WindGrid(InGameState inGameState, Node rootNode, AssetManager assetManager) {
-        this.inGameState = inGameState;
+    public WindGrid(InGameStateClient inGameStateClient, Node rootNode, AssetManager assetManager) {
+        this.inGameStateClient = inGameStateClient;
         this.assetManager = assetManager;
         gridRoot = new Node();
         rootNode.attachChild(gridRoot);
@@ -52,7 +52,7 @@ public class WindGrid implements SimpleEventListener {
             for (int x = -max; x < (max + 1); x += increment) {
                 Vector3f location = new Vector3f(x, gridHeight, z);
                 positions[i++] = location;
-                Vector3f wind = inGameState.getWeather().getWindComposant(location);
+                Vector3f wind = inGameStateClient.getWeather().getWindComposant(location);
                 positions[i++] = location.add(wind);
             }
         }
@@ -75,12 +75,12 @@ public class WindGrid implements SimpleEventListener {
         Geometry gridGeometry = new Geometry("Grid", m);
         gridGeometry.setMaterial(mat);
         gridRoot.attachChild(gridGeometry);
-        registerDefaultKeys(inGameState);
+        registerDefaultKeys(inGameStateClient);
         setVisibility();
     }
 
-    private void registerDefaultKeys(InGameState inGameState) {
-        inGameState.getPlayerUI().registerKey("Show grid", KeyInput.KEY_W, this);
+    private void registerDefaultKeys(InGameStateClient inGameStateClient) {
+        inGameStateClient.getPlayerUI().registerKey("Show grid", KeyInput.KEY_W, this);
     }
 
     private void setVisibility() {
@@ -91,6 +91,7 @@ public class WindGrid implements SimpleEventListener {
         }
     }
 
+    @Override
     public void onEvent(String name, Object eventData) {
         if (eventData instanceof KeyboardInput) {
             KeyboardInput input = (KeyboardInput) eventData;

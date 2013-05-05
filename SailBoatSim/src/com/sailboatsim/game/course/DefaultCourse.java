@@ -13,7 +13,7 @@ import com.sailboatsim.utils.Conf;
 /**
  * Define the race course including start and finish. A course is composed of buoys.
  */
-public class DefaultCourse {
+public class DefaultCourse implements Course {
     private ArrayList<Buoy> mBuoyList;
     private Vector3f        startPos;
     private float           startPosRadius;
@@ -27,10 +27,12 @@ public class DefaultCourse {
         }
     }
 
+    @Override
     public List<Buoy> getBuoyList() {
         return mBuoyList;
     }
 
+    @Override
     public Buoy getNextBuoy(Buoy buoy) {
         int i = mBuoyList.indexOf(buoy);
         if ((i == -1) || (i == mBuoyList.size())) {
@@ -72,6 +74,7 @@ public class DefaultCourse {
         new Conf<DefaultCourse>().save(this, "Course", "eRace-1");
     }
 
+    @Override
     public Vector3f getARandomStartPos() {
         float angle = FastMath.nextRandomFloat() * FastMath.TWO_PI;
         float length = FastMath.nextRandomFloat() * startPosRadius;

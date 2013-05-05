@@ -5,6 +5,7 @@ package com.sailboatsim.game.environment;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
@@ -19,10 +20,10 @@ import com.sailboatsim.game.InGameState;
  * @author eric
  * 
  */
-public class DefaultScenery {
+public class DefaultScenery implements Scenery {
 
     private final DefaultSceneryData data;
-    private TerrainQuad       terrain;
+    private TerrainQuad              terrain;
 
     public DefaultScenery(InGameState inGameState, String scenery) {
         data = DefaultSceneryData.load(scenery);
@@ -78,10 +79,13 @@ public class DefaultScenery {
         rootNode.attachChild(terrain);
     }
 
-    /**
-     * @return the terrain
-     */
-    public TerrainQuad getTerrain() {
-        return terrain;
+    @Override
+    public float getTerrainHeight(Vector3f position) {
+        float height = terrain.getHeight(new Vector2f(position.x, position.z)) - 30f;
+        if (Float.isNaN(height)) {
+            height = -30f;
+        }
+        return height;
     }
+
 }
