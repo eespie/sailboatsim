@@ -6,7 +6,7 @@ package com.sailboatsim.game.course;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.GameState;
 
 /**
  * @author eric
@@ -36,7 +36,7 @@ public abstract class Buoy {
         this.pos = pos;
     }
 
-    public void init(InGameState inGameState) {
+    public void init(GameState inGameState) {
         if (model != null) {
             Node rootNode = inGameState.getRootNode();
             Spatial spatial = inGameState.getAssetManager().loadModel(model);

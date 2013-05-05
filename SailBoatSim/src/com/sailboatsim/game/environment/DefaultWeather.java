@@ -18,7 +18,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture2D;
 import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.GameState;
 
 /**
  * @author eric
@@ -38,13 +38,13 @@ public class DefaultWeather implements Weather {
     private float                    maxWindSpeed;
     private final Scenery            scenery;
 
-    public DefaultWeather(InGameState inGameState, String weather) {
+    public DefaultWeather(GameState inGameState, String weather) {
         data = DefaultWeatherData.load(weather);
         scenery = inGameState.getScenery();
         init(inGameState);
     }
 
-    private void init(InGameState inGameState) {
+    private void init(GameState inGameState) {
         createLight(inGameState.getRootNode());
         createWater(inGameState.getRootNode(), inGameState.getAssetManager(), inGameState.getViewPort());
         createSky(inGameState.getRootNode(), inGameState.getAssetManager());

@@ -12,7 +12,6 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.BloomFilter;
 import com.jme3.renderer.Camera;
@@ -31,7 +30,7 @@ import com.sailboatsim.utils.SimpleEventListener;
  * @author eric
  * 
  */
-public class InGameState extends AbstractAppState implements SimpleEventListener {
+public class InGameState extends AbstractAppState implements SimpleEventListener, GameState {
     private final Node          rootNode;
     private final Node          guiNode;
     private final AssetManager  assetManager;
@@ -107,11 +106,6 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
 
     }
 
-    public boolean isWaterOk(Vector3f position, float margin) {
-        float h = scenery.getTerrainHeight(position);
-        return h < -margin;
-    }
-
     @Override
     public void onEvent(String name, Object eventData) {
         if (eventData instanceof KeyboardInput) {
@@ -128,16 +122,18 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
 
     }
 
-    /**
-     * @return the assetManager
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.GameState#getAssetManager()
      */
+    @Override
     public AssetManager getAssetManager() {
         return assetManager;
     }
 
-    /**
-     * @return the isRunning
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.GameState#isRunning()
      */
+    @Override
     public boolean isRunning() {
         return isRunning;
     }
@@ -154,24 +150,34 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         displaytext.setText(message);
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.GameState#getRootNode()
+     */
+    @Override
     public Node getRootNode() {
         return rootNode;
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.GameState#getViewPort()
+     */
+    @Override
     public ViewPort getViewPort() {
         return viewPort;
     }
 
-    /**
-     * @return the weather
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.GameState#getWeather()
      */
+    @Override
     public Weather getWeather() {
         return weather;
     }
 
-    /**
-     * @return the inputManager
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.GameState#getInputManager()
      */
+    @Override
     public InputManager getInputManager() {
         return inputManager;
     }
@@ -183,6 +189,10 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         return gameTime;
     }
 
+    /* (non-Javadoc)
+     * @see com.sailboatsim.game.GameState#getScenery()
+     */
+    @Override
     public Scenery getScenery() {
         return scenery;
     }

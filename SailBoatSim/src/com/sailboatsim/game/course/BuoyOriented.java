@@ -9,7 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.GameState;
 
 //-----------------------------------------------------------------------------
 /*
@@ -48,7 +48,7 @@ public class BuoyOriented extends Buoy {
     }
 
     @Override
-    public void init(InGameState inGameState) {
+    public void init(GameState inGameState) {
         super.init(inGameState);
         AssetManager assetManager = inGameState.getAssetManager();
         Spatial spatial = assetManager.loadModel("Models/arrow.j3o");

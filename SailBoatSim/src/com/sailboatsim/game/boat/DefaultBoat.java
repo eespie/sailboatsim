@@ -16,10 +16,11 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.GameState;
 import com.sailboatsim.game.course.BoatCourse;
 import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.game.course.Course;
+import com.sailboatsim.game.environment.Scenery;
 import com.sailboatsim.game.environment.Weather;
 import com.sailboatsim.utils.Utils;
 
@@ -35,12 +36,11 @@ public class DefaultBoat implements Boat {
     private final Node            boat;
     private final Node            camNode;
     private final Spatial         boatModel;
-    protected final InGameState   inGameState;
 
     protected boolean             left        = false;
     protected boolean             right       = false;
 
-    protected final BoatPosition  position;
+    protected BoatPosition        position;
 
     private final List<Node>      starboardSails;
     private final List<Node>      portSails;
@@ -49,6 +49,7 @@ public class DefaultBoat implements Boat {
 
     private BoatCourse            boatCourse;
     private final Weather         weather;
+    private final Scenery         scenery;
 
     private float                 relWindAngle;
     private float                 windAspect;
@@ -57,8 +58,8 @@ public class DefaultBoat implements Boat {
 
     private boolean               finished    = false;
 
-    public DefaultBoat(InGameState inGameState) {
-        this.inGameState = inGameState;
+    public DefaultBoat(GameState inGameState) {
+        scenery = inGameState.getScenery();
         weather = inGameState.getWeather();
         data = DefaultBoatData.load("first");
 
@@ -77,6 +78,7 @@ public class DefaultBoat implements Boat {
         position = new BoatPosition(0, rootBoat.getLocalTranslation(), 0, 0, 0, 0, 0);
     }
 
+    @Override
     public void setCourse(Course defaultCourse) {
         boatCourse = new BoatCourse(defaultCourse);
     }
@@ -86,9 +88,6 @@ public class DefaultBoat implements Boat {
      */
     @Override
     public void update(float tpf) {
-        if (!inGameState.isRunning()) {
-            return;
-        }
         float inTpf = tpf * 1.50f;
 
         Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(position.curSpeed);
@@ -104,13 +103,13 @@ public class DefaultBoat implements Boat {
         windAspect = Utils.angleToMinusPiPi(FastMath.atan2(windVector.x, -windVector.z) - position.heading);
         float windSpeed = windVector.length();
         float targetSpeed = getSpeed(windAspect, windSpeed);
-        if (!inGameState.isWaterOk(position.boatPos, 2f)) {
+        if (!scenery.isWaterOk(position.boatPos, 2f)) {
             targetSpeed /= 2.0f;
         }
 
         position.curSpeed = FastMath.interpolateLinear(data.yawInertia, position.curSpeed, targetSpeed);
 
-        if (!inGameState.isWaterOk(position.boatPos, 0)) {
+        if (!scenery.isWaterOk(position.boatPos, 0)) {
             position.curSpeed = 0.1f;
         }
 
@@ -325,6 +324,23 @@ public class DefaultBoat implements Boat {
     @Override
     public void setRight(boolean right) {
         this.right = right;
+    }
+
+    /**
+     * @return the position
+     */
+    @Override
+    public BoatPosition getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position
+     *            the position to set
+     */
+    @Override
+    public void setPosition(BoatPosition position) {
+        this.position = position;
     }
 
 }

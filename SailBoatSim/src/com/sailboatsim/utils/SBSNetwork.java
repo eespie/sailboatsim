@@ -11,6 +11,7 @@ public class SBSNetwork {
         Serializer.registerClass(ServiceMessage.class);
         Serializer.registerClass(KeyMessage.class);
         Serializer.registerClass(PosMessage.class);
+        Serializer.registerClass(BoatPosition.class);
     }
 
     @Serializable
@@ -77,12 +78,24 @@ public class SBSNetwork {
 
     @Serializable
     public static class PosMessage extends AbstractMessage {
-        public int          id;
+        public String       name;
         public int          sequenceNumber;
         public BoatPosition pos;
 
         public PosMessage() {
             setReliable(false);
+        }
+
+        /**
+         * @param name
+         * @param sequenceNumber
+         * @param pos
+         */
+        public PosMessage(String name, int sequenceNumber, BoatPosition pos) {
+            super();
+            this.name = name;
+            this.sequenceNumber = sequenceNumber;
+            this.pos = pos;
         }
     }
 }

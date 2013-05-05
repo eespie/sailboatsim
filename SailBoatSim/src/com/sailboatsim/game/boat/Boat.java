@@ -3,6 +3,7 @@ package com.sailboatsim.game.boat;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.sailboatsim.game.course.Buoy;
+import com.sailboatsim.game.course.Course;
 
 public interface Boat {
 
@@ -49,10 +50,15 @@ public interface Boat {
      */
     public abstract boolean getRight();
 
+    public abstract BoatPosition getPosition();
+
+    public abstract void setPosition(BoatPosition position);
+
     /**
      * @param right
      *            the right to set
      */
     public abstract void setRight(boolean right);
 
+    public abstract void setCourse(Course defaultCourse);
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.GameState;
 import com.sailboatsim.utils.Conf;
 
 //-----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ public class DefaultCourse implements Course {
     private DefaultCourse() {
     }
 
-    public void init(InGameState inGameState) {
+    public void init(GameState inGameState) {
         for (Buoy buoy : mBuoyList) {
             buoy.init(inGameState);
         }

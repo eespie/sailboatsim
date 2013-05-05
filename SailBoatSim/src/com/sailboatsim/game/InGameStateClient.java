@@ -42,7 +42,7 @@ public class InGameStateClient extends InGameState {
         super(app);
         this.client = client;
         if (client != null) {
-            client.addMessageListener(new ClientListener(), PosMessage.class, ServiceMessage.class);
+            client.addMessageListener(new ClientListener(this), PosMessage.class, ServiceMessage.class);
         }
     }
 
@@ -67,9 +67,7 @@ public class InGameStateClient extends InGameState {
 
         setUpKeys();
         if (client != null) {
-            client.send(new ServiceMessage("Connect", "Player 1"));
-            //Thread thrClient = new Thread(new ClientThread(this));
-            //thrClient.start();
+            client.send(new ServiceMessage("CONNECT", "Player 1"));
         }
     }
 
@@ -114,15 +112,31 @@ public class InGameStateClient extends InGameState {
     }
 
     public class ClientListener implements MessageListener<Client> {
+        private final InGameStateClient inGameStateClient;
+
+        /**
+         * @param inGameStateClient
+         */
+        public ClientListener(InGameStateClient inGameStateClient) {
+            super();
+            this.inGameStateClient = inGameStateClient;
+        }
+
         @Override
         public void messageReceived(Client source, Message message) {
             if (message instanceof PosMessage) {
-
+                PosMessage posMessage = (PosMessage) message;
+                playerBoat.setPosition(posMessage.pos);
             }
             if (message instanceof ServiceMessage) {
                 ServiceMessage svc = (ServiceMessage) message;
-                if ("Connection Error".equals(svc.type)) {
+                System.out.println("Received Service message " + svc.type);
+
+                if ("CONNECTION OK".equals(svc.type)) {
                     System.out.println(svc.type + " " + svc.strVal);
+                    client.send(new ServiceMessage("START", "Player 1"));
+                    Thread thrClient = new Thread(new ClientThread(inGameStateClient));
+                    thrClient.start();
                 }
             }
         }

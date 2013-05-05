@@ -14,7 +14,7 @@ import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapMode;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.GameState;
 
 /**
  * @author eric
@@ -25,12 +25,12 @@ public class DefaultScenery implements Scenery {
     private final DefaultSceneryData data;
     private TerrainQuad              terrain;
 
-    public DefaultScenery(InGameState inGameState, String scenery) {
+    public DefaultScenery(GameState inGameState, String scenery) {
         data = DefaultSceneryData.load(scenery);
         init(inGameState);
     }
 
-    private void init(InGameState inGameState) {
+    private void init(GameState inGameState) {
         createTerrain(inGameState.getRootNode(), inGameState.getAssetManager());
     }
 
@@ -86,6 +86,15 @@ public class DefaultScenery implements Scenery {
             height = -30f;
         }
         return height;
+    }
+
+    @Override
+    public boolean isWaterOk(Vector3f position, float margin) {
+        float height = terrain.getHeight(new Vector2f(position.x, position.z)) - 30f;
+        if (Float.isNaN(height)) {
+            return true;
+        }
+        return height < -margin;
     }
 
 }

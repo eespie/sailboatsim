@@ -15,7 +15,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Box;
-import com.sailboatsim.game.InGameState;
+import com.sailboatsim.game.GameState;
 
 /**
  * @author eric
@@ -34,7 +34,7 @@ public class BuoyLine extends Buoy {
     }
 
     @Override
-    public void init(InGameState inGameState) {
+    public void init(GameState inGameState) {
         for (BuoyOriented buoy : buoys) {
             buoy.init(inGameState);
         }

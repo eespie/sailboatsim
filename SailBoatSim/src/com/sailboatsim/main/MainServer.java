@@ -8,7 +8,7 @@ import com.jme3.network.Server;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
 import com.jme3.system.JmeSystem;
-import com.sailboatsim.game.InGameStateServer;
+import com.sailboatsim.server.ServerState;
 import com.sailboatsim.utils.SBSNetwork;
 
 /**
@@ -40,7 +40,7 @@ public class MainServer extends SimpleApplication {
             server = Network.createServer(19664);
             server.start();
 
-            InGameStateServer inGameState = new InGameStateServer(this, server);
+            ServerState inGameState = new ServerState(this, server);
             stateManager.attach(inGameState);
             pauseOnFocus = false;
 
