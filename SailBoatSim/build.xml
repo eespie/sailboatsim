@@ -72,5 +72,8 @@
     nbproject/build-impl.xml file. 
 
     -->
+	<target name="-post-init">
+	 <copydir dest="${dist.dir}/assets/Data" src="assets/Data"></copydir>
+	</target>
     
 </project>
