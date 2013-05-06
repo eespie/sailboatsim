@@ -16,6 +16,7 @@
             <zipfileset file="resources/macapp/osx-icon.icns" fullpath="${application.title}.app/Contents/Resources/GenericApp.icns"/>
             <zipfileset file="${dist.jar}" prefix="${application.title}.app/Contents/Resources/Java"/>
             <zipfileset dir="${dist.dir}/lib" prefix="${application.title}.app/Contents/Resources/Java/lib"/>
+            <zipfileset dir="${dist.dir}/assets" prefix="${application.title}.app/Contents/Resources/Java/assets"/>
         </zip>
         <delete file="resources/macapp/_Info.plist"/>
     </target>

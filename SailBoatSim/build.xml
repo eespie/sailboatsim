@@ -73,7 +73,9 @@
 
     -->
 	<target name="-post-init">
-	 <copydir dest="${dist.dir}/assets/Data" src="assets/Data"></copydir>
+		<copy todir="${dist.dir}/assets/Data">
+			<fileset dir="assets/Data" />
+		</copy>
 	</target>
     
 </project>
