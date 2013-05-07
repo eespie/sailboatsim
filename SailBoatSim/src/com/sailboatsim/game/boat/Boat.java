@@ -18,6 +18,8 @@ public interface Boat {
 
     public abstract void setPosition(Vector3f pos);
 
+    public abstract Node getBoat();
+
     /**
      * @return
      * @see com.sailboatsim.game.course.BoatCourse#getNextBuoy()

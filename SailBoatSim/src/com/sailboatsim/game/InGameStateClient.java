@@ -5,6 +5,11 @@ package com.sailboatsim.game;
 
 import static com.jme3.math.FastMath.RAD_TO_DEG;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.Callable;
+
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
@@ -14,12 +19,15 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
+import com.jme3.scene.Node;
+import com.sailboatsim.game.boat.Boat;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.player.CamManager;
 import com.sailboatsim.player.PlayerBoat;
 import com.sailboatsim.player.PlayerUI;
 import com.sailboatsim.player.WindGrid;
+import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SBSNetwork.PosMessage;
 import com.sailboatsim.utils.SBSNetwork.ServiceMessage;
 import com.sailboatsim.utils.Utils;
@@ -29,11 +37,14 @@ import com.sailboatsim.utils.Utils;
  * 
  */
 public class InGameStateClient extends InGameState {
-    private final Client client;
-    private PlayerUI     playerUI;
-    private DefaultBoat  playerBoat;
-    private CamManager   camManager;
-    private WindGrid     windGrid;
+    private final Client            client;
+    private PlayerUI                playerUI;
+    private PlayerBoat              playerBoat;
+    private CamManager              camManager;
+    private WindGrid                windGrid;
+    private String                  myName;
+    private boolean                 canStart   = false;
+    private final Map<String, Boat> otherBoats = new HashMap<String, Boat>();
 
     /**
      * @param app
@@ -67,7 +78,8 @@ public class InGameStateClient extends InGameState {
 
         setUpKeys();
         if (client != null) {
-            client.send(new ServiceMessage("CONNECT", "Player 1"));
+            myName = "Player " + new Random().nextInt(100);
+            client.send(new ServiceMessage("CONNECT", myName));
         }
     }
 
@@ -76,6 +88,21 @@ public class InGameStateClient extends InGameState {
      */
     private void setUpKeys() {
         playerUI.registerKey("Pause", KeyInput.KEY_P, this);
+        playerUI.registerKey("Quit", KeyInput.KEY_ESCAPE, this);
+        playerUI.registerKey("Start", KeyInput.KEY_S, this);
+
+    }
+
+    @Override
+    public void onEvent(String name, Object eventData) {
+        if (eventData instanceof KeyboardInput) {
+            KeyboardInput input = (KeyboardInput) eventData;
+            if (canStart && "Start".equals(name) && !input.keyPressed) {
+                client.send(new ServiceMessage("START", myName));
+                Thread thrClient = new Thread(new ClientThread(this));
+                thrClient.start();
+            }
+        }
     }
 
     @Override
@@ -85,6 +112,9 @@ public class InGameStateClient extends InGameState {
         playerBoat.update(tpf);
         camManager.update(tpf);
         playerUI.update(tpf);
+        for (Boat boat : otherBoats.values()) {
+            boat.update(tpf);
+        }
 
         Buoy nextBuoy = playerBoat.getNextBuoy();
         if (nextBuoy != null) {
@@ -126,17 +156,35 @@ public class InGameStateClient extends InGameState {
         public void messageReceived(Client source, Message message) {
             if (message instanceof PosMessage) {
                 PosMessage posMessage = (PosMessage) message;
-                playerBoat.setPosition(posMessage.pos);
+                if ((myName != null) && myName.equals(posMessage.name)) {
+                    playerBoat.setPosition(posMessage.pos);
+                } else {
+                    Boat boat = otherBoats.get(posMessage.name);
+                    if (boat == null) {
+                        boat = new DefaultBoat(inGameStateClient);
+                        boat.setCourse(course);
+                        final Boat aBoat = boat;
+                        inGameStateClient.getApp().enqueue(new Callable<Node>() {
+                            @Override
+                            public Node call() throws Exception {
+                                getRootNode().attachChild(aBoat.getBoat());
+                                return getRootNode();
+                            }
+                        });
+                        otherBoats.put(posMessage.name, boat);
+                    }
+                    boat.setPosition(posMessage.pos);
+                }
             }
             if (message instanceof ServiceMessage) {
                 ServiceMessage svc = (ServiceMessage) message;
                 System.out.println("Received Service message " + svc.type);
 
-                if ("CONNECTION OK".equals(svc.type)) {
+                if ("CONNECTED".equals(svc.type)) {
                     System.out.println(svc.type + " " + svc.strVal);
-                    client.send(new ServiceMessage("START", "Player 1"));
-                    Thread thrClient = new Thread(new ClientThread(inGameStateClient));
-                    thrClient.start();
+                    if (myName.equals(svc.strVal)) {
+                        canStart = true;
+                    }
                 }
             }
         }

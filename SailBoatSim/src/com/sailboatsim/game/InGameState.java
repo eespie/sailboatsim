@@ -39,6 +39,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     private final ViewPort      viewPort;
     protected final FlyByCamera flyBy;
     protected final Camera      cam;
+    private Application         app;
 
     private boolean             isRunning = true;
     private Node                localGuiNode;
@@ -64,6 +65,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        this.app = app;
 
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
         BloomFilter bloom = new BloomFilter(BloomFilter.GlowMode.Objects);
@@ -117,6 +119,8 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
                 } else {
                     pausetext.setText("PAUSED");
                 }
+            } else if ("Quit".equals(name) && !input.keyPressed) {
+                app.destroy();
             }
         }
 
@@ -195,6 +199,13 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     @Override
     public Scenery getScenery() {
         return scenery;
+    }
+
+    /**
+     * @return the app
+     */
+    public Application getApp() {
+        return app;
     }
 
 }

@@ -88,7 +88,7 @@ public class DefaultBoat implements Boat {
      */
     @Override
     public void update(float tpf) {
-        float inTpf = tpf * 1.50f;
+        float inTpf = tpf;
 
         Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(position.curSpeed);
 
@@ -190,6 +190,7 @@ public class DefaultBoat implements Boat {
     /**
      * @return the boat
      */
+    @Override
     public Node getBoat() {
         return rootBoat;
     }

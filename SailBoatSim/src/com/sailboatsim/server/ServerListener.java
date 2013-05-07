@@ -32,7 +32,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
             if ("CONNECT".equals(svc.type)) {
                 source.setAttribute("name", svc.strVal);
-                source.send(new ServiceMessage("CONNECTION OK", "Master"));
+                source.send(new ServiceMessage("CONNECTED", svc.strVal));
             } else if ("START".equals(svc.type)) {
                 Boat boat = new DefaultBoat(serverState);
                 serverState.getBoats().put(svc.strVal, boat);

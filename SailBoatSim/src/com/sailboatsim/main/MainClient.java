@@ -24,9 +24,10 @@ public class MainClient extends SimpleApplication {
             JmeSystem.setLowPermissions(true);
         }
         AppSettings settings = new AppSettings(true);
-        // settings.setResolution(1280, 720);
-        // settings.setBitsPerPixel(32);
-        // settings.setTitle("Sail DefaultBoat Sim");
+
+        //settings.setResolution(1280, 720);
+        //settings.setBitsPerPixel(32);
+        //settings.setTitle("Sail DefaultBoat Sim");
         try {
             settings.load("com.eboreal.sailboatsim");
             settings.save("com.eboreal.sailboatsim");
@@ -44,7 +45,7 @@ public class MainClient extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         try {
-            client = Network.connectToServer("127.0.0.1", 19664);
+            client = Network.connectToServer("192.168.0.11", 19664);
             client.start();
         } catch (IOException e) {
             e.printStackTrace();

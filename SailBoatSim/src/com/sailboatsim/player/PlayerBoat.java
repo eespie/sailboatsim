@@ -23,7 +23,8 @@ public class PlayerBoat extends DefaultBoat implements SimpleEventListener {
 
         inGameStateClient.getPlayerUI().registerKey("Turn Left", KeyInput.KEY_J, this);
         inGameStateClient.getPlayerUI().registerKey("Turn Right", KeyInput.KEY_K, this);
-        inGameStateClient.getPlayerUI().registerKey("Set Spinaker", KeyInput.KEY_S, this);
+        inGameStateClient.getPlayerUI().registerKey("Turn Left", KeyInput.KEY_LEFT, this);
+        inGameStateClient.getPlayerUI().registerKey("Turn Right", KeyInput.KEY_RIGHT, this);
     }
 
     /* (non-Javadoc)
