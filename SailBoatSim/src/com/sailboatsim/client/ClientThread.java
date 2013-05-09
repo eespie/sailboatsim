@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sailboatsim.game;
+package com.sailboatsim.client;
 
 import com.jme3.network.Client;
 import com.sailboatsim.game.boat.Boat;

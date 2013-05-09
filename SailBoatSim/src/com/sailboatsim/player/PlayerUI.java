@@ -20,7 +20,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.shape.Quad;
 import com.jme3.util.BufferUtils;
-import com.sailboatsim.game.InGameStateClient;
+import com.sailboatsim.client.InGameStateClient;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.game.course.Buoy;
 import com.sailboatsim.utils.KeyboardInput;

@@ -4,7 +4,7 @@
 package com.sailboatsim.player;
 
 import com.jme3.input.KeyInput;
-import com.sailboatsim.game.InGameStateClient;
+import com.sailboatsim.client.InGameStateClient;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.utils.KeyboardInput;
 import com.sailboatsim.utils.SimpleEventListener;

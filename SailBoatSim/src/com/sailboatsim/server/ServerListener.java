@@ -38,9 +38,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
                 serverState.getBoats().put(svc.strVal, boat);
                 boat.setPosition(serverState.getCourse().getARandomStartPos());
                 boat.setCourse(serverState.getCourse());
-                serverState.setRunning(true);
-                Thread thr = new Thread(new ServerThread(serverState));
-                thr.start();
+                if (!serverState.isRunning()) {
+                    serverState.setRunning(true);
+                    Thread thr = new Thread(new ServerThread(serverState));
+                    thr.start();
+                }
             }
         }
     }

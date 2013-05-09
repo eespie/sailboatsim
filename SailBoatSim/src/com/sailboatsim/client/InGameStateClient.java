@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sailboatsim.game;
+package com.sailboatsim.client;
 
 import static com.jme3.math.FastMath.RAD_TO_DEG;
 
@@ -20,6 +20,7 @@ import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.scene.Node;
+import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.boat.Boat;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.game.course.Buoy;

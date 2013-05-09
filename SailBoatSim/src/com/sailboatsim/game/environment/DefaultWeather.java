@@ -54,6 +54,7 @@ public class DefaultWeather implements Weather {
         nbDisplacementStep = maxDisplacement / stepDisplacement;
         coeffSum = 40.0F * ((float) Math.log(nbDisplacementStep) + 0.577215665F + (1F / (2F * nbDisplacementStep)));
         maxWindSpeed = data.globalWindSpeed + 5f;
+        mainWindDir = new Quaternion().fromAngleAxis(data.globalWindDirection, Vector3f.UNIT_Y).mult(Vector3f.UNIT_Z);
     }
 
     /* (non-Javadoc)

@@ -8,7 +8,7 @@ import com.jme3.network.Client;
 import com.jme3.network.Network;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
-import com.sailboatsim.game.InGameStateClient;
+import com.sailboatsim.client.InGameStateClient;
 import com.sailboatsim.utils.SBSNetwork;
 
 /**
@@ -39,6 +39,7 @@ public class MainClient extends SimpleApplication {
         MainClient app = new MainClient();
         app.setShowSettings(false);
         app.setSettings(settings);
+        app.setDisplayStatView(false);
         app.start();
     }
 

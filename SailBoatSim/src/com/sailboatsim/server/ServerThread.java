@@ -17,7 +17,6 @@ public class ServerThread implements Runnable {
 
     private static int        NO_DELAY_PER_YIELD = 16;
 
-    private final float       period_ms          = 30f / 1000F;
     private final long        period_ns          = 30 * 1000000;
 
     /**
@@ -40,14 +39,15 @@ public class ServerThread implements Runnable {
         int noDelays = 0;
         long startTime = System.nanoTime();
         long beforeTime = startTime;
+        long previousTime = startTime;
         int sequenceNumber = 0;
 
         while (serverState.isRunning() && serverState.isEnabled()) {
-            float gameTime = (beforeTime - startTime) / 1000000000F;
+            float tpf = (beforeTime - previousTime) / 1000000000F;
 
             for (String name : serverState.getBoats().keySet()) {
                 Boat boat = serverState.getBoats().get(name);
-                boat.update(period_ms);
+                boat.update(tpf);
                 server.broadcast(new PosMessage(name, sequenceNumber, boat.getPosition()));
             }
 
@@ -56,7 +56,7 @@ public class ServerThread implements Runnable {
             sleepTime = (period_ns - timeDiff) - overSleepTime;
             if (sleepTime > 0) {
                 try {
-                    Thread.sleep(sleepTime / 1000000, (int) (sleepTime % 1000000));
+                    Thread.sleep(sleepTime / 1000000);
                 } catch (InterruptedException e) {
                 }
                 overSleepTime = System.nanoTime() - afterTime - sleepTime;
@@ -67,6 +67,7 @@ public class ServerThread implements Runnable {
                     noDelays = 0;
                 }
             }
+            previousTime = beforeTime;
             beforeTime = System.nanoTime();
             sequenceNumber++;
         }

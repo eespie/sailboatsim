@@ -69,6 +69,7 @@ public class SBSNetwork {
         }
 
         public KeyMessage(int sequenceNumber, float gameTime, boolean left, boolean right) {
+            setReliable(false);
             this.sequenceNumber = sequenceNumber;
             this.gameTime = gameTime;
             this.left = left;
@@ -92,7 +93,7 @@ public class SBSNetwork {
          * @param pos
          */
         public PosMessage(String name, int sequenceNumber, BoatPosition pos) {
-            super();
+            setReliable(false);
             this.name = name;
             this.sequenceNumber = sequenceNumber;
             this.pos = pos;
