@@ -48,8 +48,8 @@ public class BuoyOriented extends Buoy {
     }
 
     @Override
-    public void init(GameState inGameState) {
-        super.init(inGameState);
+    public Node init(GameState inGameState) {
+        Node buoyNode = super.init(inGameState);
         AssetManager assetManager = inGameState.getAssetManager();
         Spatial spatial = assetManager.loadModel("Models/arrow.j3o");
         spatial.setLocalScale(3);
@@ -64,7 +64,8 @@ public class BuoyOriented extends Buoy {
         arrowNode.attachChild(node);
         arrowNode.setLocalTranslation(0, 5, 0);
         arrowNode.setCullHint(CullHint.Always);
-        rootBuoy.attachChild(arrowNode);
+        buoyNode.attachChild(arrowNode);
+        return buoyNode;
     }
 
     @Override

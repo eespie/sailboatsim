@@ -24,6 +24,8 @@ import com.sailboatsim.game.InGameState;
 import com.sailboatsim.game.boat.Boat;
 import com.sailboatsim.game.boat.DefaultBoat;
 import com.sailboatsim.game.course.Buoy;
+import com.sailboatsim.game.course.Course;
+import com.sailboatsim.game.course.DefaultCourse;
 import com.sailboatsim.player.CamManager;
 import com.sailboatsim.player.PlayerBoat;
 import com.sailboatsim.player.PlayerUI;
@@ -163,7 +165,9 @@ public class InGameStateClient extends InGameState {
                     Boat boat = otherBoats.get(posMessage.name);
                     if (boat == null) {
                         boat = new DefaultBoat(inGameStateClient);
-                        boat.setCourse(course);
+                        Course aCourse = DefaultCourse.load("eRace-1");
+                        aCourse.init(inGameStateClient);
+                        boat.setCourse(aCourse);
                         final Boat aBoat = boat;
                         inGameStateClient.getApp().enqueue(new Callable<Node>() {
                             @Override

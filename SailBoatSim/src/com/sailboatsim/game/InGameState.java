@@ -80,7 +80,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
         weather = new DefaultWeather(this, "sunny");
 
         course = DefaultCourse.load("eRace-1");
-        course.init(this);
+        rootNode.attachChild(course.init(this));
 
         /** Load the HUD */
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");

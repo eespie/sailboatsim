@@ -6,6 +6,7 @@ import java.util.List;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.sailboatsim.game.GameState;
 import com.sailboatsim.utils.Conf;
 
@@ -21,10 +22,13 @@ public class DefaultCourse implements Course {
     private DefaultCourse() {
     }
 
-    public void init(GameState inGameState) {
+    @Override
+    public Node init(GameState inGameState) {
+        Node courseNode = new Node("Course");
         for (Buoy buoy : mBuoyList) {
-            buoy.init(inGameState);
+            courseNode.attachChild(buoy.init(inGameState));
         }
+        return courseNode;
     }
 
     @Override
@@ -51,22 +55,16 @@ public class DefaultCourse implements Course {
 
         BuoyLine buoyLine = new BuoyLine("Start", new Vector3f(280, 0, 0), new Vector3f(180, 0, 0), "Models/buoy.j3o", "Models/buoy.j3o", "Start Line");
         mBuoyList.add(buoyLine);
-
         BuoyOriented buoy = new BuoyOriented("1", true, new Vector3f(250, 0, 625), new Vector3f(250, 0, 700), "1", "Models/buoy.j3o");
         mBuoyList.add(buoy);
-
         buoy = new BuoyOriented("2", true, new Vector3f(-625, 0, 400), new Vector3f(-700, 0, 400), "2", "Models/buoy.j3o");
         mBuoyList.add(buoy);
-
         buoy = new BuoyOriented("3", true, new Vector3f(-1000, 0, -250), new Vector3f(-1100, 0, -250), "3", "Models/buoy.j3o");
         mBuoyList.add(buoy);
-
         buoy = new BuoyOriented("4", true, new Vector3f(0, 0, -625), new Vector3f(0, 0, -700), "4", "Models/buoy.j3o");
         mBuoyList.add(buoy);
-
         buoyLine = new BuoyLine("Finish", new Vector3f(320, 0, 0), new Vector3f(130, 0, 0), "Models/buoy.j3o", "Models/buoy.j3o", "Finish Line");
         mBuoyList.add(buoyLine);
-
         startPos = new Vector3f(250, 0, -250);
         startPosRadius = 125f;
 

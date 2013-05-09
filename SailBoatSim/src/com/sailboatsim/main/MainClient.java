@@ -25,9 +25,9 @@ public class MainClient extends SimpleApplication {
         }
         AppSettings settings = new AppSettings(true);
 
-        //settings.setResolution(1280, 720);
-        //settings.setBitsPerPixel(32);
-        //settings.setTitle("Sail DefaultBoat Sim");
+        //        settings.setResolution(1280, 720);
+        //        settings.setBitsPerPixel(32);
+        //        settings.setTitle("Sail DefaultBoat Sim");
         try {
             settings.load("com.eboreal.sailboatsim");
             settings.save("com.eboreal.sailboatsim");

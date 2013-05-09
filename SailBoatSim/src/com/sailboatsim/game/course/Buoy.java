@@ -36,15 +36,15 @@ public abstract class Buoy {
         this.pos = pos;
     }
 
-    public void init(GameState inGameState) {
+    public Node init(GameState inGameState) {
         if (model != null) {
-            Node rootNode = inGameState.getRootNode();
             Spatial spatial = inGameState.getAssetManager().loadModel(model);
             rootBuoy = new Node();
             rootBuoy.attachChild(spatial);
             rootBuoy.setLocalTranslation(pos);
-            rootNode.attachChild(rootBuoy);
+            return rootBuoy;
         }
+        return new Node();
     }
 
     /**

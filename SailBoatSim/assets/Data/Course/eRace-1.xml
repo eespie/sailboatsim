@@ -1,10 +1,14 @@
 <com.sailboatsim.game.course.DefaultCourse>
   <mBuoyList>
     <com.sailboatsim.game.course.BuoyLine>
-      <name>Start</name>
-      <description>Start Line</description>
       <buoys>
         <com.sailboatsim.game.course.BuoyOriented>
+          <isclockwise>false</isclockwise>
+          <orientation>
+            <x>-100.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+          </orientation>
           <name>Left Start</name>
           <description>Start Line</description>
           <model>Models/buoy.j3o</model>
@@ -13,14 +17,14 @@
             <y>0.0</y>
             <z>0.0</z>
           </pos>
-          <isclockwise>false</isclockwise>
+        </com.sailboatsim.game.course.BuoyOriented>
+        <com.sailboatsim.game.course.BuoyOriented>
+          <isclockwise>true</isclockwise>
           <orientation>
-            <x>-100.0</x>
+            <x>100.0</x>
             <y>0.0</y>
             <z>0.0</z>
           </orientation>
-        </com.sailboatsim.game.course.BuoyOriented>
-        <com.sailboatsim.game.course.BuoyOriented>
           <name>Right Start</name>
           <description>Start Line</description>
           <model>Models/buoy.j3o</model>
@@ -29,16 +33,23 @@
             <y>0.0</y>
             <z>0.0</z>
           </pos>
-          <isclockwise>true</isclockwise>
-          <orientation>
-            <x>100.0</x>
-            <y>0.0</y>
-            <z>0.0</z>
-          </orientation>
         </com.sailboatsim.game.course.BuoyOriented>
       </buoys>
+      <name>Start</name>
+      <description>Start Line</description>
+      <pos>
+        <x>230.0</x>
+        <y>0.0</y>
+        <z>0.0</z>
+      </pos>
     </com.sailboatsim.game.course.BuoyLine>
     <com.sailboatsim.game.course.BuoyOriented>
+      <isclockwise>true</isclockwise>
+      <orientation>
+        <x>0.0</x>
+        <y>0.0</y>
+        <z>75.0</z>
+      </orientation>
       <name>1</name>
       <description>1</description>
       <model>Models/buoy.j3o</model>
@@ -47,14 +58,14 @@
         <y>0.0</y>
         <z>625.0</z>
       </pos>
-      <isclockwise>true</isclockwise>
-      <orientation>
-        <x>0.0</x>
-        <y>0.0</y>
-        <z>75.0</z>
-      </orientation>
     </com.sailboatsim.game.course.BuoyOriented>
     <com.sailboatsim.game.course.BuoyOriented>
+      <isclockwise>true</isclockwise>
+      <orientation>
+        <x>-75.0</x>
+        <y>0.0</y>
+        <z>0.0</z>
+      </orientation>
       <name>2</name>
       <description>2</description>
       <model>Models/buoy.j3o</model>
@@ -63,14 +74,14 @@
         <y>0.0</y>
         <z>400.0</z>
       </pos>
+    </com.sailboatsim.game.course.BuoyOriented>
+    <com.sailboatsim.game.course.BuoyOriented>
       <isclockwise>true</isclockwise>
       <orientation>
-        <x>-75.0</x>
+        <x>-100.0</x>
         <y>0.0</y>
         <z>0.0</z>
       </orientation>
-    </com.sailboatsim.game.course.BuoyOriented>
-    <com.sailboatsim.game.course.BuoyOriented>
       <name>3</name>
       <description>3</description>
       <model>Models/buoy.j3o</model>
@@ -79,14 +90,14 @@
         <y>0.0</y>
         <z>-250.0</z>
       </pos>
-      <isclockwise>true</isclockwise>
-      <orientation>
-        <x>-100.0</x>
-        <y>0.0</y>
-        <z>0.0</z>
-      </orientation>
     </com.sailboatsim.game.course.BuoyOriented>
     <com.sailboatsim.game.course.BuoyOriented>
+      <isclockwise>true</isclockwise>
+      <orientation>
+        <x>0.0</x>
+        <y>0.0</y>
+        <z>-75.0</z>
+      </orientation>
       <name>4</name>
       <description>4</description>
       <model>Models/buoy.j3o</model>
@@ -95,18 +106,16 @@
         <y>0.0</y>
         <z>-625.0</z>
       </pos>
-      <isclockwise>true</isclockwise>
-      <orientation>
-        <x>0.0</x>
-        <y>0.0</y>
-        <z>-75.0</z>
-      </orientation>
     </com.sailboatsim.game.course.BuoyOriented>
     <com.sailboatsim.game.course.BuoyLine>
-      <name>Finish</name>
-      <description>Finish Line</description>
       <buoys>
         <com.sailboatsim.game.course.BuoyOriented>
+          <isclockwise>false</isclockwise>
+          <orientation>
+            <x>-190.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+          </orientation>
           <name>Left Finish</name>
           <description>Finish Line</description>
           <model>Models/buoy.j3o</model>
@@ -115,14 +124,14 @@
             <y>0.0</y>
             <z>0.0</z>
           </pos>
-          <isclockwise>false</isclockwise>
+        </com.sailboatsim.game.course.BuoyOriented>
+        <com.sailboatsim.game.course.BuoyOriented>
+          <isclockwise>true</isclockwise>
           <orientation>
-            <x>-190.0</x>
+            <x>190.0</x>
             <y>0.0</y>
             <z>0.0</z>
           </orientation>
-        </com.sailboatsim.game.course.BuoyOriented>
-        <com.sailboatsim.game.course.BuoyOriented>
           <name>Right Finish</name>
           <description>Finish Line</description>
           <model>Models/buoy.j3o</model>
@@ -131,14 +140,15 @@
             <y>0.0</y>
             <z>0.0</z>
           </pos>
-          <isclockwise>true</isclockwise>
-          <orientation>
-            <x>190.0</x>
-            <y>0.0</y>
-            <z>0.0</z>
-          </orientation>
         </com.sailboatsim.game.course.BuoyOriented>
       </buoys>
+      <name>Finish</name>
+      <description>Finish Line</description>
+      <pos>
+        <x>225.0</x>
+        <y>0.0</y>
+        <z>0.0</z>
+      </pos>
     </com.sailboatsim.game.course.BuoyLine>
   </mBuoyList>
   <startPos>

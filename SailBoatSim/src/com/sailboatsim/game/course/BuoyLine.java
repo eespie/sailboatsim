@@ -34,9 +34,10 @@ public class BuoyLine extends Buoy {
     }
 
     @Override
-    public void init(GameState inGameState) {
+    public Node init(GameState inGameState) {
+        Node buoyNode = new Node();
         for (BuoyOriented buoy : buoys) {
-            buoy.init(inGameState);
+            buoyNode.attachChild(buoy.init(inGameState));
         }
         Vector3f p0 = buoys[0].getPos();
         Vector3f p1 = buoys[1].getPos();
@@ -58,7 +59,8 @@ public class BuoyLine extends Buoy {
         lineNode.setLocalRotation(new Quaternion().fromAngleAxis(angle, Vector3f.UNIT_Y));
         lineNode.setLocalTranslation(p0.add(p1).divide(2f).add(new Vector3f(0, -1f, 0)));
         lineNode.setCullHint(CullHint.Always);
-        inGameState.getRootNode().attachChild(lineNode);
+        buoyNode.attachChild(lineNode);
+        return buoyNode;
     }
 
     @Override
