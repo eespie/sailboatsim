@@ -44,6 +44,7 @@ public class ServerState extends AbstractAppState implements GameState {
     private Scenery                 scenery;
     private Weather                 weather;
     private Course                  course;
+    private final Application       mainApp;
 
     /**
      * @param app
@@ -54,6 +55,7 @@ public class ServerState extends AbstractAppState implements GameState {
         assetManager = app.getAssetManager();
         viewPort = app.getViewPort();
         inputManager = app.getInputManager();
+        mainApp = app;
 
         this.server = server;
         server.addMessageListener(new ServerListener(this), KeyMessage.class, ServiceMessage.class);
@@ -143,5 +145,10 @@ public class ServerState extends AbstractAppState implements GameState {
      */
     public void setRunning(boolean isRunning) {
         this.isRunning = isRunning;
+    }
+
+    @Override
+    public Application getApp() {
+        return mainApp;
     }
 }

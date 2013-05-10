@@ -37,7 +37,7 @@ public class MainClient extends SimpleApplication {
         SBSNetwork.networkInitilizer();
 
         MainClient app = new MainClient();
-        app.setShowSettings(false);
+        app.setShowSettings(true);
         app.setSettings(settings);
         app.setDisplayStatView(false);
         app.start();
@@ -45,16 +45,20 @@ public class MainClient extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        try {
-            client = Network.connectToServer("192.168.0.11", 19664);
-            client.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        startClientConnection("192.168.0.11");
 
         inGameState = new InGameStateClient(this, client);
         stateManager.attach(inGameState);
         pauseOnFocus = false;
+    }
+
+    private void startClientConnection(String addr) {
+        try {
+            client = Network.connectToServer(addr, 19664);
+            client.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -204,6 +204,7 @@ public class InGameState extends AbstractAppState implements SimpleEventListener
     /**
      * @return the app
      */
+    @Override
     public Application getApp() {
         return app;
     }

@@ -1,5 +1,6 @@
 package com.sailboatsim.game;
 
+import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.InputManager;
 import com.jme3.renderer.ViewPort;
@@ -34,5 +35,7 @@ public interface GameState {
     public abstract InputManager getInputManager();
 
     public abstract Scenery getScenery();
+
+    public abstract Application getApp();
 
 }

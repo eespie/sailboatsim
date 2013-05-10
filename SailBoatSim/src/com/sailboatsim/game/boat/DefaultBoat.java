@@ -10,6 +10,7 @@ import static com.jme3.math.FastMath.RAD_TO_DEG;
 
 import java.util.List;
 
+import com.jme3.app.Application;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -50,6 +51,7 @@ public class DefaultBoat implements Boat {
     private BoatCourse            boatCourse;
     private final Weather         weather;
     private final Scenery         scenery;
+    private final Application     mainApp;
 
     private float                 relWindAngle;
     private float                 windAspect;
@@ -61,6 +63,7 @@ public class DefaultBoat implements Boat {
     public DefaultBoat(GameState inGameState) {
         scenery = inGameState.getScenery();
         weather = inGameState.getWeather();
+        mainApp = inGameState.getApp();
         data = DefaultBoatData.load("first");
 
         rootBoat = new Node();
@@ -88,6 +91,8 @@ public class DefaultBoat implements Boat {
      */
     @Override
     public void update(float tpf) {
+        position.gameTime += tpf;
+
         float inTpf = 1.5F * tpf;
 
         Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(position.curSpeed);

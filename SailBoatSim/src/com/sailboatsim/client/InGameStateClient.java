@@ -14,8 +14,6 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.KeyInput;
-import com.jme3.math.FastMath;
-import com.jme3.math.Vector3f;
 import com.jme3.network.Client;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -104,6 +102,7 @@ public class InGameStateClient extends InGameState {
                 client.send(new ServiceMessage("START", myName));
                 Thread thrClient = new Thread(new ClientThread(this));
                 thrClient.start();
+                playerBoat.setGameTime(0);
             }
         }
     }
@@ -121,15 +120,15 @@ public class InGameStateClient extends InGameState {
 
         Buoy nextBuoy = playerBoat.getNextBuoy();
         if (nextBuoy != null) {
-            Vector3f buoyPos = nextBuoy.getPos();
-            Vector3f toNextBuoy = buoyPos.subtract(playerBoat.getPos());
-            Vector3f toNextBuoyNorm = toNextBuoy.normalize();
-            float toBuoySpeed = playerBoat.getBoatSpeed().dot(toNextBuoyNorm);
-            Vector3f boatSpeedNorm = playerBoat.getBoatSpeed().normalize();
-            float buoyAngle = FastMath.RAD_TO_DEG * Utils.angleToMinusPiPi((FastMath.atan2(toNextBuoyNorm.z, toNextBuoyNorm.x) - FastMath.atan2(boatSpeedNorm.z, boatSpeedNorm.x)));
-
-            display("Speed " + playerBoat.getCurSpeed() + "kts Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
-                    + (int) playerBoat.getRelWindSpeed() + " Next Buoy " + (int) toNextBuoy.length() + "m at " + (int) buoyAngle + " spd " + (FastMath.floor(toBuoySpeed * 10f) / 10f) + "kts");
+            //Vector3f buoyPos = nextBuoy.getPos();
+            //Vector3f toNextBuoy = buoyPos.subtract(playerBoat.getPos());
+            //Vector3f toNextBuoyNorm = toNextBuoy.normalize();
+            //float toBuoySpeed = playerBoat.getBoatSpeed().dot(toNextBuoyNorm);
+            //Vector3f boatSpeedNorm = playerBoat.getBoatSpeed().normalize();
+            //float buoyAngle = FastMath.RAD_TO_DEG * Utils.angleToMinusPiPi((FastMath.atan2(toNextBuoyNorm.z, toNextBuoyNorm.x) - FastMath.atan2(boatSpeedNorm.z, boatSpeedNorm.x)));
+            //            display("Speed " + playerBoat.getCurSpeed() + "kts Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
+            //                    + (int) playerBoat.getRelWindSpeed() + " Next Buoy " + (int) toNextBuoy.length() + "m at " + (int) buoyAngle + " spd " + (FastMath.floor(toBuoySpeed * 10f) / 10f) + "kts");
+            display("Speed " + playerBoat.getCurSpeed() + "kts delta " + (playerBoat.getGameTime() - playerBoat.getPosition().gameTime));
         } else {
             display("Speed " + playerBoat.getCurSpeed() + " Heading " + (int) (RAD_TO_DEG * Utils.angleToZero2Pi(playerBoat.getHeading())) + " rel wind angle " + (int) (RAD_TO_DEG * playerBoat.getRelWindAspect()) + "  rel wind "
                     + (int) playerBoat.getRelWindSpeed());
@@ -157,7 +156,7 @@ public class InGameStateClient extends InGameState {
 
         @Override
         public void messageReceived(Client source, Message message) {
-            if (message instanceof PosMessage) {
+            if ((message instanceof PosMessage) && canStart) {
                 PosMessage posMessage = (PosMessage) message;
                 if ((myName != null) && myName.equals(posMessage.name)) {
                     playerBoat.setPosition(posMessage.pos);

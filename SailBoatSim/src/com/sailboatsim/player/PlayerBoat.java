@@ -14,6 +14,7 @@ import com.sailboatsim.utils.SimpleEventListener;
  * 
  */
 public class PlayerBoat extends DefaultBoat implements SimpleEventListener {
+    float gameTime = 0;
 
     /**
      * @param inGameStateClient
@@ -46,6 +47,20 @@ public class PlayerBoat extends DefaultBoat implements SimpleEventListener {
 
     @Override
     public void update(float tpf) {
-        super.update(tpf);
+        gameTime += tpf;
+        float delta = gameTime - getPosition().gameTime;
+        if (delta > tpf) {
+            super.update(tpf + ((delta - tpf) / 2.0f));
+        } else {
+            super.update(tpf);
+        }
+    }
+
+    public float getGameTime() {
+        return gameTime;
+    }
+
+    public void setGameTime(float f) {
+        gameTime = f;
     }
 }
