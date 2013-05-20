@@ -114,7 +114,7 @@ public class CamManager implements SimpleEventListener {
             camNode.setLocalTranslation(currPos.mult(zoomFactor));
         }
         // rotate camera
-        camHeading = FastMath.interpolateLinear(0.01f, camHeading, playerBoat.getHeading());
+        camHeading = FastMath.interpolateLinear(tpf, camHeading, playerBoat.getHeading());
         if (easeCam) {
             playerBoat.getCamNode().setLocalRotation(new Quaternion().fromAngleAxis(-camHeading + headingOffset, Vector3f.UNIT_Y));
         }

@@ -7,7 +7,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.network.Client;
 import com.jme3.network.Network;
 import com.jme3.system.AppSettings;
-import com.jme3.system.JmeSystem;
 import com.sailboatsim.client.InGameStateClient;
 import com.sailboatsim.utils.SBSNetwork;
 
@@ -20,18 +19,14 @@ public class MainClient extends SimpleApplication {
     private InGameStateClient inGameState;
 
     public static void main(String[] args) {
-        if (System.getProperty("javawebstart.version") != null) {
-            JmeSystem.setLowPermissions(true);
-        }
         AppSettings settings = new AppSettings(true);
 
-        //        settings.setResolution(1280, 720);
-        //        settings.setBitsPerPixel(32);
-        //        settings.setTitle("Sail DefaultBoat Sim");
         try {
             settings.load("com.eboreal.sailboatsim");
-            settings.save("com.eboreal.sailboatsim");
         } catch (BackingStoreException e1) {
+            settings.setResolution(1024, 768);
+            settings.setBitsPerPixel(32);
+            settings.setTitle("Sail Boat Sim");
         }
 
         SBSNetwork.networkInitilizer();
@@ -45,6 +40,10 @@ public class MainClient extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        try {
+            settings.save("com.eboreal.sailboatsim");
+        } catch (BackingStoreException e) {
+        }
         startClientConnection("192.168.0.11");
 
         inGameState = new InGameStateClient(this, client);

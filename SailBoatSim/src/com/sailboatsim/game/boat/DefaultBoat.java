@@ -10,7 +10,6 @@ import static com.jme3.math.FastMath.RAD_TO_DEG;
 
 import java.util.List;
 
-import com.jme3.app.Application;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -51,7 +50,6 @@ public class DefaultBoat implements Boat {
     private BoatCourse            boatCourse;
     private final Weather         weather;
     private final Scenery         scenery;
-    private final Application     mainApp;
 
     private float                 relWindAngle;
     private float                 windAspect;
@@ -63,7 +61,6 @@ public class DefaultBoat implements Boat {
     public DefaultBoat(GameState inGameState) {
         scenery = inGameState.getScenery();
         weather = inGameState.getWeather();
-        mainApp = inGameState.getApp();
         data = DefaultBoatData.load("first");
 
         rootBoat = new Node();
@@ -94,6 +91,7 @@ public class DefaultBoat implements Boat {
         position.gameTime += tpf;
 
         float inTpf = 1.5F * tpf;
+        float interpFactor = 1f;
 
         Vector3f boatDir = boat.getLocalRotation().mult(Vector3f.UNIT_Z).mult(position.curSpeed);
 
@@ -112,24 +110,24 @@ public class DefaultBoat implements Boat {
             targetSpeed /= 2.0f;
         }
 
-        position.curSpeed = FastMath.interpolateLinear(data.yawInertia, position.curSpeed, targetSpeed);
+        position.curSpeed = FastMath.interpolateLinear(data.yawInertia * interpFactor, position.curSpeed, targetSpeed);
 
         if (!scenery.isWaterOk(position.boatPos, 0)) {
             position.curSpeed = 0.1f;
         }
 
         if (left) {
-            position.rotSpeed = FastMath.interpolateLinear(data.yawInertia, position.rotSpeed, -(FastMath.sqrt(position.curSpeed + 1f) + 0.5f) / 2.0f);
+            position.rotSpeed = FastMath.interpolateLinear(data.yawInertia * interpFactor, position.rotSpeed, -(FastMath.sqrt(position.curSpeed + 1f) + 0.5f) / 2.0f);
         } else if (right) {
-            position.rotSpeed = FastMath.interpolateLinear(data.yawInertia, position.rotSpeed, (FastMath.sqrt(position.curSpeed + 1f) + 0.5f) / 2.0f);
+            position.rotSpeed = FastMath.interpolateLinear(data.yawInertia * interpFactor, position.rotSpeed, (FastMath.sqrt(position.curSpeed + 1f) + 0.5f) / 2.0f);
         } else {
-            position.rotSpeed = FastMath.interpolateLinear(0.05f, position.rotSpeed, 0);
+            position.rotSpeed = FastMath.interpolateLinear(0.05f * interpFactor, position.rotSpeed, 0);
         }
         position.heading += inTpf * position.rotSpeed;
         float displacement = inTpf * position.curSpeed * 2.0f;
 
-        position.roll = FastMath.interpolateLinear(0.05f, position.roll, (FastMath.abs(windAspect) < QUARTER_PI ? windAspect / QUARTER_PI : (FastMath.sign(windAspect) * (PI - FastMath.abs(windAspect))) / (3 * QUARTER_PI)) * windRelVector.length()
-                * DEG_TO_RAD);
+        position.roll = FastMath.interpolateLinear(0.05f * interpFactor, position.roll, (FastMath.abs(windAspect) < QUARTER_PI ? windAspect / QUARTER_PI : (FastMath.sign(windAspect) * (PI - FastMath.abs(windAspect))) / (3 * QUARTER_PI))
+                * windRelVector.length() * DEG_TO_RAD);
 
         position.pitch += inTpf * (1f + (position.curSpeed / (5f + FastMath.abs(windAspect))));
         float pitchAngle = (5f - (windSpeed / 8f)) * DEG_TO_RAD * ((FastMath.sin(position.pitch) * FastMath.cos(position.pitch)) + FastMath.sin(position.pitch + (FastMath.abs(windAspect) / 2f)));
