@@ -1,0 +1,8 @@
+Material My Material : MatDefs/Flag/Flag.j3md {
+     MaterialParameters {
+        ColorMap : Textures/buoy.png
+     }
+    AdditionalRenderState {
+      FaceCull Off
+    }
+}

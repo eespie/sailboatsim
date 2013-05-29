@@ -62,7 +62,7 @@ public class BuoyOriented extends Buoy {
         node.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.QUARTER_PI, Vector3f.UNIT_X));
         arrowNode = new Node();
         arrowNode.attachChild(node);
-        arrowNode.setLocalTranslation(0, 5, 0);
+        arrowNode.setLocalTranslation(0, 8, 0);
         arrowNode.setCullHint(CullHint.Always);
         buoyNode.attachChild(arrowNode);
         return buoyNode;
@@ -70,6 +70,7 @@ public class BuoyOriented extends Buoy {
 
     @Override
     public boolean update(BuoyState buoyState, Vector3f boatPos) {
+        super.update(buoyState, boatPos);
         Vector3f toBuoy = pos.subtract(boatPos);
         float angle = FastMath.atan2(-toBuoy.z, toBuoy.x);
         if (isclockwise) {

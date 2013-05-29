@@ -3844,7 +3844,7 @@
       <float>7.83009</float>
     </java.lang.Float-array>
   </speedData>
-  <boatModel>Models/boat/boat.j3o</boatModel>
+  <boatModel>Scenes/Boat.j3o</boatModel>
   <sailAxis>
     <com.jme3.math.Vector3f>
       <x>0.0</x>

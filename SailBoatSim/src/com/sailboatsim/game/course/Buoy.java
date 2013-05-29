@@ -3,6 +3,8 @@
  */
 package com.sailboatsim.game.course;
 
+import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -42,6 +44,15 @@ public abstract class Buoy {
             rootBuoy = new Node();
             rootBuoy.attachChild(spatial);
             rootBuoy.setLocalTranslation(pos);
+
+            Spatial flagNode = rootBuoy.descendantMatches("flag").get(0);
+
+            Material mat = new Material(inGameState.getAssetManager(), "MatDefs/Flag/Flag.j3md");
+            mat.setTexture("ColorMap", inGameState.getAssetManager().loadTexture("Textures/buoy.png"));
+            mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+            flagNode.setMaterial(mat);
+            flagNode.addControl(new FlagControl(mat, inGameState.getWeather(), pos));
+
             return rootBuoy;
         }
         return new Node();
@@ -70,10 +81,10 @@ public abstract class Buoy {
      * 
      * @param buoyState
      *            current state
-     * @param posx
+     * @param boatPos
      *            ship position
-     * @param posy
-     *            ship position
+     * @param tpf
+     *            Time per frame
      * @return true if the buoy is passed
      */
     public boolean update(BuoyState buoyState, Vector3f boatPos) {

@@ -34,7 +34,7 @@ public class MainClient extends SimpleApplication {
         MainClient app = new MainClient();
         app.setShowSettings(true);
         app.setSettings(settings);
-        app.setDisplayStatView(false);
+        // app.setDisplayStatView(false);
         app.start();
     }
 

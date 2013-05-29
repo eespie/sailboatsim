@@ -10,12 +10,13 @@ import static com.jme3.math.FastMath.RAD_TO_DEG;
 
 import java.util.List;
 
+import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.Spatial.CullHint;
 import com.sailboatsim.game.GameState;
 import com.sailboatsim.game.course.BoatCourse;
 import com.sailboatsim.game.course.Buoy;
@@ -42,9 +43,6 @@ public class DefaultBoat implements Boat {
 
     protected BoatPosition        position;
 
-    private final List<Node>      starboardSails;
-    private final List<Node>      portSails;
-    private final Node            spiSail;
     private boolean               hasSpinaker = false;
 
     private BoatCourse            boatCourse;
@@ -71,9 +69,31 @@ public class DefaultBoat implements Boat {
         boatModel = inGameState.getAssetManager().loadModel(data.boatModel);
         boatModel.setLocalTranslation(data.modelLocalTranslation);
         boat.attachChild(boatModel);
-        starboardSails = boat.descendantMatches("sail.-1");
-        portSails = boat.descendantMatches("sail.-2");
-        spiSail = (Node) boat.descendantMatches("sail3").get(0);
+
+        List<Spatial> nodes = rootBoat.descendantMatches("jib");
+        if (!nodes.isEmpty()) {
+            Spatial jibNode = nodes.get(0);
+            Material mat = new Material(inGameState.getAssetManager(), "MatDefs/Sail/Sail.j3md");
+            mat.setTexture("ColorMap", inGameState.getAssetManager().loadTexture("Textures/Sail.png"));
+            mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+            mat.setFloat("MinWindAngle", 18.0f);
+
+            jibNode.setMaterial(mat);
+            jibNode.addControl(new SailControl(mat, this));
+        }
+
+        nodes = rootBoat.descendantMatches("main-sail");
+        if (!nodes.isEmpty()) {
+            Spatial mainSailNode = nodes.get(0);
+            Material mat = new Material(inGameState.getAssetManager(), "MatDefs/MainSail/MainSail.j3md");
+            mat.setTexture("ColorMap", inGameState.getAssetManager().loadTexture("Textures/Sail.png"));
+            mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+            mat.setFloat("MinWindAngle", 18.0f);
+
+            mainSailNode.addControl(new SailControl(mat, this));
+
+            rootBoat.descendantMatches("node-sail").get(0).setMaterial(mat);
+        }
 
         position = new BoatPosition(0, rootBoat.getLocalTranslation(), 0, 0, 0, 0, 0);
     }
@@ -100,8 +120,6 @@ public class DefaultBoat implements Boat {
 
         relWindAngle = FastMath.atan2(windRelVector.x, -windRelVector.z) - position.heading;
         relWindAngle = Utils.angleToMinusPiPi(relWindAngle);
-
-        float relWindAbs = FastMath.abs(relWindAngle);
 
         windAspect = Utils.angleToMinusPiPi(FastMath.atan2(windVector.x, -windVector.z) - position.heading);
         float windSpeed = windVector.length();
@@ -144,34 +162,7 @@ public class DefaultBoat implements Boat {
 
         rootBoat.setLocalTranslation(position.boatPos);
 
-        // Display sails
-        float sailRot = (relWindAbs < 0.60f ? (relWindAbs * 0.1f) / 0.6f : (0.51f * relWindAbs) - 0.21f);
-        if (relWindAngle > 0) {
-            int i = 0;
-            for (Node node : starboardSails) {
-                node.setCullHint(CullHint.Dynamic);
-                node.setLocalRotation(new Quaternion().fromAngleAxis(-sailRot, data.sailAxis[i++]));
-            }
-            for (Node node : portSails) {
-                node.setCullHint(CullHint.Always);
-            }
-        } else {
-            for (Node node : starboardSails) {
-                node.setCullHint(CullHint.Always);
-            }
-            int i = 0;
-            for (Node node : portSails) {
-                node.setCullHint(CullHint.Dynamic);
-                node.setLocalRotation(new Quaternion().fromAngleAxis(sailRot, data.sailAxis[i++]));
-            }
-        }
-        if (hasSpinaker) {
-            spiSail.setCullHint(CullHint.Dynamic);
-        } else {
-            spiSail.setCullHint(CullHint.Always);
-        }
-
-        finished = boatCourse.update(position.boatPos);
+        finished = boatCourse.update(position.boatPos, tpf);
     }
 
     private float getSpeed(float windAngle, float windSpeed) {

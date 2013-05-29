@@ -1,0 +1,29 @@
+MaterialDef My MaterialDef {
+
+    MaterialParameters {
+        Vector4 Color
+        Texture2D ColorMap
+        Float WaveLength
+        Float Amplitude
+        Float Time
+    }
+
+    Technique {
+        VertexShader GLSL100:   MatDefs/Flag/Flag.vert
+        FragmentShader GLSL100: MatDefs/Flag/Flag.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            Time
+        }
+
+        Defines {
+            COLOR : Color
+            COLORMAP : ColorMap
+            WAVELENGTH : WaveLength
+            AMPLITUDE : Amplitude
+            TIME : Time
+        }
+    }
+
+}

@@ -53,17 +53,17 @@ public class DefaultCourse implements Course {
     private void create() {
         mBuoyList = new ArrayList<Buoy>();
 
-        BuoyLine buoyLine = new BuoyLine("Start", new Vector3f(280, 0, 0), new Vector3f(180, 0, 0), "Models/buoy.j3o", "Models/buoy.j3o", "Start Line");
+        BuoyLine buoyLine = new BuoyLine("Start", new Vector3f(280, 0, 0), new Vector3f(180, 0, 0), "Scenes/buoy.j3o", "Scenes/buoy.j3o", "Start Line");
         mBuoyList.add(buoyLine);
-        BuoyOriented buoy = new BuoyOriented("1", true, new Vector3f(250, 0, 625), new Vector3f(250, 0, 700), "1", "Models/buoy.j3o");
+        BuoyOriented buoy = new BuoyOriented("1", true, new Vector3f(250, 0, 625), new Vector3f(250, 0, 700), "1", "Scenes/buoy.j3o");
         mBuoyList.add(buoy);
-        buoy = new BuoyOriented("2", true, new Vector3f(-625, 0, 400), new Vector3f(-700, 0, 400), "2", "Models/buoy.j3o");
+        buoy = new BuoyOriented("2", true, new Vector3f(-625, 0, 400), new Vector3f(-700, 0, 400), "2", "Scenes/buoy.j3o");
         mBuoyList.add(buoy);
-        buoy = new BuoyOriented("3", true, new Vector3f(-1000, 0, -250), new Vector3f(-1100, 0, -250), "3", "Models/buoy.j3o");
+        buoy = new BuoyOriented("3", true, new Vector3f(-1000, 0, -250), new Vector3f(-1100, 0, -250), "3", "Scenes/buoy.j3o");
         mBuoyList.add(buoy);
-        buoy = new BuoyOriented("4", true, new Vector3f(0, 0, -625), new Vector3f(0, 0, -700), "4", "Models/buoy.j3o");
+        buoy = new BuoyOriented("4", true, new Vector3f(0, 0, -625), new Vector3f(0, 0, -700), "4", "Scenes/buoy.j3o");
         mBuoyList.add(buoy);
-        buoyLine = new BuoyLine("Finish", new Vector3f(320, 0, 0), new Vector3f(130, 0, 0), "Models/buoy.j3o", "Models/buoy.j3o", "Finish Line");
+        buoyLine = new BuoyLine("Finish", new Vector3f(320, 0, 0), new Vector3f(130, 0, 0), "Scenes/buoy.j3o", "Scenes/buoy.j3o", "Finish Line");
         mBuoyList.add(buoyLine);
         startPos = new Vector3f(250, 0, -250);
         startPosRadius = 125f;

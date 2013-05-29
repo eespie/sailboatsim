@@ -11,7 +11,7 @@
           </orientation>
           <name>Left Start</name>
           <description>Start Line</description>
-          <model>Models/buoy.j3o</model>
+          <model>Scenes/Buoy.j3o</model>
           <pos>
             <x>280.0</x>
             <y>0.0</y>
@@ -27,7 +27,7 @@
           </orientation>
           <name>Right Start</name>
           <description>Start Line</description>
-          <model>Models/buoy.j3o</model>
+          <model>Scenes/Buoy.j3o</model>
           <pos>
             <x>180.0</x>
             <y>0.0</y>
@@ -52,7 +52,7 @@
       </orientation>
       <name>1</name>
       <description>1</description>
-      <model>Models/buoy.j3o</model>
+      <model>Scenes/Buoy.j3o</model>
       <pos>
         <x>250.0</x>
         <y>0.0</y>
@@ -68,7 +68,7 @@
       </orientation>
       <name>2</name>
       <description>2</description>
-      <model>Models/buoy.j3o</model>
+      <model>Scenes/Buoy.j3o</model>
       <pos>
         <x>-625.0</x>
         <y>0.0</y>
@@ -84,7 +84,7 @@
       </orientation>
       <name>3</name>
       <description>3</description>
-      <model>Models/buoy.j3o</model>
+      <model>Scenes/Buoy.j3o</model>
       <pos>
         <x>-1000.0</x>
         <y>0.0</y>
@@ -100,7 +100,7 @@
       </orientation>
       <name>4</name>
       <description>4</description>
-      <model>Models/buoy.j3o</model>
+      <model>Scenes/Buoy.j3o</model>
       <pos>
         <x>0.0</x>
         <y>0.0</y>
@@ -118,7 +118,7 @@
           </orientation>
           <name>Left Finish</name>
           <description>Finish Line</description>
-          <model>Models/buoy.j3o</model>
+          <model>Scenes/Buoy.j3o</model>
           <pos>
             <x>320.0</x>
             <y>0.0</y>
@@ -134,7 +134,7 @@
           </orientation>
           <name>Right Finish</name>
           <description>Finish Line</description>
-          <model>Models/buoy.j3o</model>
+          <model>Scenes/Buoy.j3o</model>
           <pos>
             <x>130.0</x>
             <y>0.0</y>

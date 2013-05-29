@@ -1,0 +1,33 @@
+MaterialDef My MaterialDef {
+
+    MaterialParameters {
+        Vector4 Color
+        Texture2D ColorMap
+        Float WaveLength
+        Float Amplitude
+        Float Time
+        Float WindAngle
+        Float MinWindAngle
+    }
+
+    Technique {
+        VertexShader GLSL100:   MatDefs/MainSail/MainSail.vert
+        FragmentShader GLSL100: MatDefs/MainSail/MainSail.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            Time
+        }
+
+        Defines {
+            COLOR : Color
+            COLORMAP : ColorMap
+            WAVELENGTH : WaveLength
+            AMPLITUDE : Amplitude
+            TIME : Time
+            WINDANGLE : WindAngle
+            MINWINDANGLE : MinWindAngle
+        }
+    }
+
+}

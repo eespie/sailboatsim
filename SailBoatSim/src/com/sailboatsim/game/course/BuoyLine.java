@@ -70,6 +70,8 @@ public class BuoyLine extends Buoy {
 
     @Override
     public boolean update(BuoyState buoyState, Vector3f boatPos) {
+        super.update(buoyState, boatPos);
+
         if (!(buoyState instanceof BuoyLineState)) {
             return false;
         }

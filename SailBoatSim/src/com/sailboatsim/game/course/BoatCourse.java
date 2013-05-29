@@ -21,7 +21,7 @@ public class BoatCourse {
         }
     }
 
-    public boolean update(Vector3f boatPos) {
+    public boolean update(Vector3f boatPos, float tpf) {
         nextBuoy = null;
         int index = lastBuoyPassed;
         if (index < 0) {
