@@ -3,9 +3,7 @@ MaterialDef My MaterialDef {
     MaterialParameters {
         Vector4 Color
         Texture2D ColorMap
-        Float WaveLength
-        Float Amplitude
-        Float Time
+        Vector3 Flag
     }
 
     Technique {
@@ -14,15 +12,11 @@ MaterialDef My MaterialDef {
 
         WorldParameters {
             WorldViewProjectionMatrix
-            Time
         }
 
         Defines {
             COLOR : Color
             COLORMAP : ColorMap
-            WAVELENGTH : WaveLength
-            AMPLITUDE : Amplitude
-            TIME : Time
         }
     }
 

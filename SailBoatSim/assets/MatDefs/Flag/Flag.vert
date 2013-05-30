@@ -2,20 +2,10 @@ attribute vec3 inPosition;
 attribute vec2 inTexCoord;
 
 uniform mat4 g_WorldViewProjectionMatrix;
-uniform float g_Time;
 
 varying vec2 texCoord;
 
-#ifdef WAVELENGTH
-    uniform float m_WaveLength;
-#endif
-#ifdef AMPLITUDE
-    uniform float m_Amplitude;
-#endif
-#ifdef TIME
-    uniform float m_Time;
-#endif
-
+uniform vec3 m_Flag;
 
 /*
 * vertex shader to animate a flag
@@ -25,21 +15,12 @@ void main() {
     texCoord = inTexCoord;
     vec4 position = vec4(inPosition, 1.0);
 
-    float waveLength = 3.0;
-    #ifdef WAVELENGTH
-        waveLength = m_WaveLength;
-    #endif
-    float amplitude = 0.8;
-    #ifdef AMPLITUDE
-        amplitude = m_Amplitude;
-    #endif
+    float waveLength = m_Flag.x;
+    float amplitude = m_Flag.y;
+    float time = m_Flag.z;
 
     float sinOff = (texCoord.x + texCoord.y) * waveLength;
-    float tm = -g_Time * 5.0;
-
-    #ifdef TIME
-        tm = -m_Time;
-    #endif
+    float tm = -time;
 
     float fx = texCoord.x;
     float fy = texCoord.x * texCoord.y;

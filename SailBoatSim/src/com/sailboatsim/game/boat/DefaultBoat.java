@@ -76,8 +76,6 @@ public class DefaultBoat implements Boat {
             Material mat = new Material(inGameState.getAssetManager(), "MatDefs/Sail/Sail.j3md");
             mat.setTexture("ColorMap", inGameState.getAssetManager().loadTexture("Textures/Sail.png"));
             mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
-            mat.setFloat("MinWindAngle", 18.0f);
-
             jibNode.setMaterial(mat);
             jibNode.addControl(new SailControl(mat, this));
         }
@@ -88,10 +86,7 @@ public class DefaultBoat implements Boat {
             Material mat = new Material(inGameState.getAssetManager(), "MatDefs/MainSail/MainSail.j3md");
             mat.setTexture("ColorMap", inGameState.getAssetManager().loadTexture("Textures/Sail.png"));
             mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
-            mat.setFloat("MinWindAngle", 18.0f);
-
             mainSailNode.addControl(new SailControl(mat, this));
-
             rootBoat.descendantMatches("node-sail").get(0).setMaterial(mat);
         }
 

@@ -1,8 +1,6 @@
 Material My Material : MatDefs/Sail/Sail.j3md {
      MaterialParameters {
         ColorMap : Textures/buoy.png
-        MinWindAngle : 30.0
-        WindAngle : 0.0
      }
     AdditionalRenderState {
       FaceCull Off

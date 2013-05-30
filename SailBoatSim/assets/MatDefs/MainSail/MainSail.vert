@@ -2,27 +2,11 @@ attribute vec3 inPosition;
 attribute vec2 inTexCoord;
 
 uniform mat4 g_WorldViewProjectionMatrix;
-uniform float g_Time;
 
 varying vec2 texCoord;
 
-#ifdef WAVELENGTH
-    uniform float m_WaveLength;
-#endif
-#ifdef AMPLITUDE
-    uniform float m_Amplitude;
-#endif
-#ifdef TIME
-    uniform float m_Time;
-#endif
-
-#ifdef WINDANGLE
-    uniform float m_WindAngle;
-#endif
-
-#ifdef MINWINDANGLE
-    uniform float m_MinWindAngle;
-#endif
+uniform vec3 m_Flag;
+uniform vec2 m_Sail;
 
 /*
 * vertex shader to animate a flag
@@ -32,32 +16,15 @@ void main() {
     texCoord = inTexCoord;
     vec4 position = vec4(inPosition, 1.0);
 
-    float awa = 0.0;
-    #ifdef WINDANGLE
-        awa = m_WindAngle;
-    #endif
-
-    float minAwa = 0.523599; /* 30 deg */
-    #ifdef MINWINDANGLE
-        minAwa = m_MinWindAngle;
-    #endif
+    float awa = m_Sail.x;
+    float minAwa = m_Sail.y;
 
     if (abs(awa) < minAwa) {
-        float waveLength = 3.0;
-        #ifdef WAVELENGTH
-            waveLength = m_WaveLength;
-        #endif
-        float amplitude = 0.5;
-        #ifdef AMPLITUDE
-            amplitude = m_Amplitude;
-        #endif
+        float waveLength = m_Flag.x;
+        float amplitude = m_Flag.y;
+        float tm = m_Flag.z;
 
         float sinOff = (texCoord.x + texCoord.y) * waveLength;
-        float tm = -g_Time * 15.0;
-
-        #ifdef TIME
-            tm = -m_Time;
-        #endif
 
         float fx = texCoord.x * texCoord.y;
         float fy = texCoord.x * texCoord.y;

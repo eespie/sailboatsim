@@ -6,6 +6,7 @@ package com.sailboatsim.game.boat;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -19,7 +20,8 @@ import com.jme3.scene.control.Control;
  */
 public class SailControl extends AbstractControl {
     private float    gameTime = 0;
-    private Material mat;
+    private Vector3f flagParams;
+    private Vector2f sailParams;
     private Boat     boat;
 
     /**
@@ -34,7 +36,12 @@ public class SailControl extends AbstractControl {
      */
     public SailControl(Material mat, Boat boat) {
         super();
-        this.mat = mat;
+        flagParams = new Vector3f();
+        flagParams.x = 2.0f;
+        mat.setVector3("Flag", flagParams);
+        sailParams = new Vector2f();
+        sailParams.y = 18.0f;
+        mat.setVector2("Sail", sailParams);
         this.boat = boat;
     }
 
@@ -66,9 +73,9 @@ public class SailControl extends AbstractControl {
             spatial.setLocalRotation(new Quaternion().fromAngleAxis(-angle, Vector3f.UNIT_Y));
             float speed = boat.getRelWindSpeed();
             gameTime += tpf * speed;
-            mat.setFloat("WindAngle", -angle * FastMath.RAD_TO_DEG);
-            mat.setFloat("Time", gameTime);
-            mat.setFloat("Amplitude", 1.14f - (0.028f * speed));
+            sailParams.x = -angle * FastMath.RAD_TO_DEG;
+            flagParams.y = 1.14f - (0.028f * speed);
+            flagParams.z = gameTime;
         }
     }
 }

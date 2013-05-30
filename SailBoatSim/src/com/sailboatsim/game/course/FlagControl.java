@@ -20,7 +20,7 @@ import com.sailboatsim.game.environment.Weather;
  */
 public class FlagControl extends AbstractControl {
     private float    gameTime = 0;
-    private Material mat;
+    private Vector3f flagParams;
     private Weather  weather;
     private Vector3f pos;
 
@@ -36,7 +36,9 @@ public class FlagControl extends AbstractControl {
      */
     public FlagControl(Material mat, Weather weather, Vector3f pos) {
         super();
-        this.mat = mat;
+        flagParams = new Vector3f();
+        flagParams.x = 2.0f;
+        mat.setVector3("Flag", flagParams);
         this.pos = pos;
         this.weather = weather;
     }
@@ -61,10 +63,8 @@ public class FlagControl extends AbstractControl {
             spatial.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.atan2(wind.x, wind.z), Vector3f.UNIT_Y));
             float speed = wind.length();
             gameTime += tpf * speed;
-            mat.clearParam("Time");
-            mat.setFloat("Time", gameTime);
-            mat.clearParam("Amplitude");
-            mat.setFloat("Amplitude", 1.14f - (0.028f * speed));
+            flagParams.y = 1.14f - (0.028f * speed);
+            flagParams.z = gameTime;
         }
     }
 
